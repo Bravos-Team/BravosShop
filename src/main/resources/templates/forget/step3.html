@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<th:block layout:fragment="content">
+    <div class="main-content">
+        <div class="login-container" style="margin: 142px auto">
+            <div class="login-header">
+                <h1>Đặt lại mật khẩu</h1>
+                <p>Tạo mật khẩu mới cho tài khoản của bạn</p>
+            </div>
+            <form class="login-form" id="newPasswordForm">
+                <div class="form-group">
+                    <label for="new-password">Mật khẩu mới</label>
+                    <input
+                            type="password"
+                            id="new-password"
+                            name="new-password"
+                            placeholder="Nhập mật khẩu mới"
+                            required
+                            minlength="8"
+                    >
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">Xác nhận mật khẩu</label>
+                    <input
+                            type="password"
+                            id="confirm-password"
+                            name="confirm-password"
+                            placeholder="Nhập lại mật khẩu"
+                            required
+                            minlength="8"
+                    >
+                </div>
+                <button type="submit" class="login-btn">Đặt lại mật khẩu</button>
+            </form>
+            <div class="signup-link">
+                <a href="auth/login">Quay lại đăng nhập</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const newPasswordForm = document.getElementById('newPasswordForm');
+        const newPasswordInput = document.getElementById('new-password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+
+        newPasswordForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            if (newPasswordInput.value !== confirmPasswordInput.value) {
+                alert('Mật khẩu không khớp. Vui lòng nhập lại.');
+                return;
+            }
+
+            if (newPasswordInput.value.length < 8) {
+                alert('Mật khẩu phải có ít nhất 8 ký tự.');
+                return;
+            }
+
+            // Add code to submit new password
+            alert('Mật khẩu đã được đặt lại thành công!');
+        });
+    </script>
+</th:block>
+</html>

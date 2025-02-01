@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+</head>
+<th:block layout:fragment="content">
+  <main class="main-content">
+    <div class="profile-container">
+      <!-- Profile Menu -->
+
+      <th:block th:replace="~{toolbox :: profile-menu}"></th:block>
+
+      <!-- Profile Content -->
+      <main class="profile-content">
+        <div class="profile-section">
+          <h2 class="section-title">Thông tin tài khoản</h2>
+          <div class="profile-stats">
+            <div class="stat-card">
+              <div class="stat-value">12</div>
+              <div class="stat-label">Đơn hàng</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">5</div>
+              <div class="stat-label">Đang giao</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">8</div>
+              <div class="stat-label">Yêu thích</div>
+            </div>
+          </div>
+          <form action="" method="POST">
+            <div class="form-group">
+              <label class="form-label">Tên đăng nhập</label>
+              <input disabled type="text" class="form-input" th:value="${#authentication.principal.username}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Họ và tên</label>
+              <input name="name" type="text" class="form-input" value="Nguyễn Văn A">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input disabled type="email" class="form-input" value="nguyenvana@email.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Số điện thoại</label>
+              <input name="name" type="tel" class="form-input" value="0123456789">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Ngày sinh</label>
+              <input name="birthday" type="date" class="form-input" value="1990-01-01">
+            </div>
+            <button type="submit" class="btn btn-primary">Cập nhật thông tin</button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </main>
+  <script>
+
+  </script>
+</th:block>
+</html>

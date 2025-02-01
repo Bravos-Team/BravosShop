@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<th:block layout:fragment="content">
+    <main class="main-content">
+        <div class="login-container" style="margin: 31px auto">
+            <div class="login-header">
+                <h1>Đăng ký</h1>
+                <img style="margin: 4px auto" class="logo" src="/res/img/logo.svg" alt="logo">
+            </div>
+
+            <form class="login-form">
+                <div class="form-group">
+                    <label for="username">Tên đăng nhập</label>
+                    <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Nhập tên đăng nhập"
+                            required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Email</label>
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Nhập email (eg: abc123@gmail.com)"
+                            required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Nhập mật khẩu"
+                            required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Nhập lại mật khẩu</label>
+                    <input
+                            type="password"
+                            id="verify-password"
+                            name="verify-password"
+                            placeholder="Nhập lại mật khẩu"
+                            required
+                    >
+                </div>
+
+                <button type="submit" class="login-btn">Đăng ký ngay</button>
+
+                <div class="signup-link">
+                    Đã có tài khoản ?
+                    <a href="#">Quay về đăng nhập</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</th:block>
+</html>

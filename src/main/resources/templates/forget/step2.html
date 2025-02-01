@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forget</title>
+</head>
+<th:block layout:fragment="content">
+  <div class="main-content">
+    <div class="login-container">
+      <div class="login-header">
+        <h1>Xác thực người dùng</h1>
+      </div>
+      <form class="login-form" id="verificationForm">
+        <div class="form-group">
+          <label for="verification-code">Mã xác thực</label>
+          <input
+                  type="text"
+                  id="verification-code"
+                  name="verification-code"
+                  placeholder="Nhập mã 6 chữ số"
+                  required
+                  maxlength="6"
+          >
+        </div>
+        <div id="resend-container">
+          <a href="javascript:void(0);" id="resend-link" class="resend-link">
+            Gửi lại mã
+          </a>
+        </div>
+        <button type="submit" class="login-btn">Xác Nhận</button>
+      </form>
+      <div class="signup-link">
+        <a href="/auth/login">Quay lại</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    const resendLink = document.getElementById('resend-link');
+    let timeLeft = 60;
+    let countdownInterval;
+
+    function updateCountdownUI(time) {
+      resendLink.textContent = time > 0
+              ? `Gửi lại mã (${time} s)`
+              : 'Gửi lại mã';
+      resendLink.style.pointerEvents = time > 0 ? 'none' : 'auto';
+      resendLink.style.color = time > 0 ? 'gray' : '';
+    }
+
+    function startCountdown() {
+      updateCountdownUI(timeLeft);
+
+      countdownInterval = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateCountdownUI(timeLeft);
+        } else {
+          clearInterval(countdownInterval);
+          resendLink.addEventListener('click', handleResend);
+        }
+      }, 1000);
+    }
+
+    function handleResend(event) {
+      event.preventDefault();
+      resendLink.removeEventListener('click', handleResend);
+      timeLeft = 60;
+      startCountdown();
+      sendVerificationCode();
+    }
+
+    function sendVerificationCode() {
+      // Hàm gửi lại mã xác thực
+      console.log('Đang gửi lại mã xác thực');
+    }
+
+    // Gán sự kiện cho lần đầu tiên
+    resendLink.addEventListener('click', handleResend);
+  </script>
+
+</th:block>
+</html>

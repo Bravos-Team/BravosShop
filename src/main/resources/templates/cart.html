@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <th:block th:replace="~{toolbox :: category-bar}"></th:block>
+
+    <main class="main-content">
+
+        <div class="cart-container">
+            <div class="cart-header">
+                <h1 class="cart-title">Giỏ Hàng Của Bạn</h1>
+                <a href="#" class="continue-shopping">
+                    ← Tiếp tục mua sắm
+                </a>
+            </div>
+
+            <div class="cart-content">
+                <!-- Cart Items -->
+                <div class="cart-items">
+                    <div class="cart-item">
+                        <img src="https://placehold.co/100" alt="iPhone 13" class="item-image">
+                        <div class="item-details">
+                            <span class="item-name">iPhone 13 Pro</span>
+                            <span class="item-category">Điện Thoại</span>
+                        </div>
+                        <span class="item-price">22.990.000đ</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1">
+                            <button class="quantity-btn">+</button>
+                        </div>
+                        <span class="item-price">22.990.000đ</span>
+                        <button class="remove-btn">×</button>
+                    </div>
+
+                    <div class="cart-item">
+                        <img src="https://placehold.co/100" alt="AirPods Pro" class="item-image">
+                        <div class="item-details">
+                            <span class="item-name">AirPods Pro</span>
+                            <span class="item-category">Phụ Kiện</span>
+                        </div>
+                        <span class="item-price">5.990.000đ</span>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1">
+                            <button class="quantity-btn">+</button>
+                        </div>
+                        <span class="item-price">5.990.000đ</span>
+                        <button class="remove-btn">×</button>
+                    </div>
+                </div>
+
+                <!-- Cart Summary -->
+                <div class="cart-summary">
+                    <h2 class="summary-title">Tổng đơn hàng</h2>
+                    <div class="summary-row">
+                        <span>Tạm tính</span>
+                        <span>28.980.000đ</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Giảm giá</span>
+                        <span>-2.000.000đ</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Phí vận chuyển</span>
+                        <span>Miễn phí</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Tổng cộng</span>
+                        <span>26.980.000đ</span>
+                    </div>
+
+                    <div class="promo-code">
+                        <span>Mã giảm giá</span>
+                        <div class="promo-input">
+                            <input type="text" placeholder="Nhập mã giảm giá">
+                            <button class="apply-btn">Áp dụng</button>
+                        </div>
+                    </div>
+
+                    <button class="checkout-btn">Tiến hành thanh toán</button>
+                </div>
+            </div>
+
+            <!-- Empty Cart State -->
+            <div class="empty-cart" style="display: none;">
+                <div class="empty-cart-message">Giỏ hàng của bạn đang trống</div>
+                <button class="empty-cart-btn">Mua sắm ngay</button>
+            </div>
+        </div>
+    </main>
+    <script>
+        // Thêm các chức năng tương tác cơ bản
+        document.querySelectorAll('.quantity-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const input = this.parentElement.querySelector('.quantity-input');
+                const currentValue = parseInt(input.value);
+                if (this.textContent === '+') {
+                    input.value = currentValue + 1;
+                } else if (currentValue > 1) {
+                    input.value = currentValue - 1;
+                }
+            });
+        });
+
+        document.querySelectorAll('.remove-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                this.closest('.cart-item').remove();
+                // Kiểm tra nếu không còn sản phẩm nào
+                if (document.querySelectorAll('.cart-item').length === 0) {
+                    document.querySelector('.cart-content').style.display = 'none';
+                    document.querySelector('.empty-cart').style.display = 'block';
+                }
+            });
+        });
+    </script>
+</th:block>

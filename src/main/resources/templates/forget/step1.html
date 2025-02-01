@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forget</title>
+</head>
+<th:block layout:fragment="content">
+    <div class="main-content">
+        <div class="login-container" style="margin: 195px auto">
+            <div class="login-header">
+                <h1>Quên mật khẩu</h1>
+            </div>
+            <form class="login-form" id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="email-username">Email hoặc tên đăng nhập</label>
+                    <input
+                            type="text"
+                            id="email-username"
+                            name="email-username"
+                            placeholder="Nhập email hoặc tên đăng nhập"
+                            required
+                    >
+                </div>
+                <button type="submit" class="login-btn">Gửi mã xác thực</button>
+            </form>
+            <div class="signup-link">
+                <a href="/auth/login">Quay lại đăng nhập</a>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

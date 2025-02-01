@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE" >Bravos Shop</title>
+    <link rel="icon" type="image/x-icon" href="/res/img/logo.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="/res/css/style.css">
+</head>
+
+<body>
+
+<th:block th:replace="~{toolbox :: header}"></th:block>
+
+<div class="container">
+    <th:block layout:fragment="content"></th:block>
+</div>
+
+<th:block th:replace="~{toolbox :: footer}"></th:block>
+
+<script src="/res/js/script.js"></script>
+
+</body>
+</html>

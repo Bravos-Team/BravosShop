@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order</title>
+</head>
+<th:block layout:fragment="content">
+  <main class="main-content">
+    <div class="profile-container">
+      <!-- Profile Menu -->
+
+      <th:block th:replace="~{toolbox :: profile-menu}"></th:block>
+
+      <!-- Profile Content -->
+      <main class="address-content">
+        <div class="address-header">
+          <h2 class="section-title">Địa chỉ giao hàng</h2>
+          <button class="btn btn-primary" onclick="openModal()">+ Thêm địa chỉ mới</button>
+        </div>
+
+        <div class="address-grid">
+          <div class="address-card">
+            <span class="address-badge">Mặc định</span>
+            <div class="address-name">Nguyễn Văn A</div>
+            <div class="address-phone">0123456789</div>
+            <div class="address-text">
+              123 Đường ABC, Phường XYZ, Quận 1, TP.HCM
+            </div>
+            <div class="address-actions">
+              <button class="btn btn-outline">Sửa</button>
+              <button class="btn btn-outline">Xóa</button>
+            </div>
+          </div>
+
+          <div class="address-card">
+            <div class="address-name">Nguyễn Văn A</div>
+            <div class="address-phone">0987654321</div>
+            <div class="address-text">
+              456 Đường DEF, Phường UVW, Quận 2, TP.HCM
+            </div>
+            <div class="address-actions">
+              <button class="btn btn-outline">Sửa</button>
+              <button class="btn btn-outline">Xóa</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <div class="modal-overlay" id="addressModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Thêm địa chỉ mới</h3>
+          <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <form>
+          <div class="profile-form-group">
+            <label class="form-label">Họ và tên</label>
+            <input type="text" class="form-input" placeholder="Nhập họ và tên">
+          </div>
+          <div class="profile-form-group">
+            <label class="form-label">Số điện thoại</label>
+            <input type="tel" class="form-input" placeholder="Nhập số điện thoại">
+          </div>
+          <div class="profile-form-group">
+            <label class="form-label">Tỉnh/Thành phố</label>
+            <input type="text" class="form-input" placeholder="Chọn tỉnh/thành phố">
+          </div>
+          <div class="profile-form-group">
+            <label class="form-label">Quận/Huyện</label>
+            <input type="text" class="form-input" placeholder="Chọn quận/huyện">
+          </div>
+          <div class="profile-form-group">
+            <label class="form-label">Phường/Xã</label>
+            <input type="text" class="form-input" placeholder="Chọn phường/xã">
+          </div>
+          <div class="profile-form-group">
+            <label class="form-label">Địa chỉ cụ thể</label>
+            <input type="text" class="form-input" placeholder="Nhập số nhà, tên đường">
+          </div>
+          <div class="form-checkbox">
+            <input type="checkbox" id="defaultAddress">
+            <label for="defaultAddress">Đặt làm địa chỉ mặc định</label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="closeModal()">Hủy</button>
+            <button type="submit" class="btn btn-primary">Lưu địa chỉ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+  <script>
+    function openModal() {
+      document.getElementById('addressModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('addressModal').classList.remove('active');
+    }
+  </script>
+</th:block>
+</html>

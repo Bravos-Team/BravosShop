@@ -1,0 +1,142 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="vi"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<th:block th:fragment="header">
+    <nav class="topnav">
+        <a href="/home">
+            <img class="logo" src="/res/img/logo.svg" alt="Logo">
+        </a>
+        <div class="search-container">
+            <input type="text" placeholder="Tìm kiếm sản phẩm...">
+            <button>Tìm kiếm</button>
+        </div>
+        <div class="nav-links">
+            <a href="/home">Trang chủ</a>
+            <a href="#">Sản phẩm</a>
+            <a href="#">Khuyến mãi</a>
+            <div class="cart-icon">
+                <a id="cartbutton" href="/p/cart">🛒</a>
+                <span class="cart-count">0</span>
+            </div>
+            <th:block sec:authorize="isAuthenticated()">
+                <div class="user-menu" onclick="toggleUserMenu()">
+                    <div class="user-menu-trigger">
+                        <b id="username" th:text="${#authentication.principal.name}"></b>
+                    </div>
+                    <div class="dropdown" id="userDropdown">
+                        <a href="/r/profile">Thông tin tài khoản</a>
+                        <a href="/r/orders">Đơn hàng của tôi</a>
+                        <a href="/logout">Đăng xuất</a>
+                    </div>
+                </div>
+            </th:block>
+            <th:block sec:authorize="!isAuthenticated()">
+                <a href="/login">Đăng nhập</a>
+            </th:block>
+        </div>
+    </nav>
+    <script>
+
+    </script>
+</th:block>
+
+<th:block th:fragment="footer">
+    <footer class="footer">
+        <p>&copy; 2025 Nguyen Quoc Bao (Bravos). All rights reserved.</p>
+    </footer>
+</th:block>
+
+<th:block th:fragment="profile-menu">
+    <aside class="profile-menu">
+        <div class="profile-menu-header">
+            <img src="https://placehold.co/100" alt="Avatar" class="profile-avatar">
+            <div class="profile-name" th:text="${#authentication.principal.name}"></div>
+            <div class="profile-email" sec:authorize="hasRole('ADMIN')">Quản trị viên</div>
+            <div class="profile-email" sec:authorize="!hasRole('ADMIN')">Thành viên</div>
+        </div>
+        <ul class="menu-list">
+            <li class="profile-menu-item">
+                <a href="#" class="menu-link active">
+                    <span class="menu-icon">👤</span>
+                    Thông tin cá nhân
+                </a>
+            </li>
+            <li class="profile-menu-item">
+                <a href="/r/changepassword" class="menu-link">
+                    <span class="menu-icon">🔒</span>
+                    Đổi mật khẩu
+                </a>
+            </li>
+            <li class="profile-menu-item">
+                <a href="/p/cart" class="menu-link">
+                    <span class="menu-icon">📦</span>
+                    Đơn hàng của tôi
+                </a>
+            </li>
+            <li class="profile-menu-item">
+                <a href="/r/address" class="menu-link">
+                    <span class="menu-icon">📋</span>
+                    Địa chỉ giao hàng
+                </a>
+            </li>
+            <li class="profile-menu-item">
+                <a href="#" class="menu-link">
+                    <span class="menu-icon">⏻</span>
+                    Đăng xuất
+                </a>
+            </li>
+        </ul>
+    </aside>
+</th:block>
+
+<th:block th:fragment="category-bar">
+    <aside class="sidebar">
+        <nav class="category-menu">
+            <ul>
+                <li>
+                    <div class="menu-item" onclick="toggleSubmenu(this)">
+                        <a class="category-link" href="#">Điện thoại</a>
+                        <span class="material-icons">arrow_drop_down</span>
+                    </div>
+                    <ul class="subcategory">
+                        <li>
+                            <div class="menu-item" onclick="toggleSubmenu(this)">
+                                <a class="category-link" href="#">Iphone</a>
+                                <span class="material-icons">arrow_drop_down</span>
+                            </div>
+                            <ul class="subcategory">
+                                <li><a href="#" class="menu-item">Iphone 8</a></li>
+                                <li><a href="#" class="menu-item">Iphone X</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#" class="menu-item">Samsung</a></li>
+                        <li><a href="#" class="menu-item">Xiaomi</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="menu-item" onclick="toggleSubmenu(this)">
+                        <a class="category-link" href="#">Điện thoại</a>
+                        <span class="material-icons">arrow_drop_down</span>
+                    </div>
+                    <ul class="subcategory">
+                        <li><a href="#" class="menu-item">Gaming</a></li>
+                        <li><a href="#" class="menu-item">Văn phòng</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="menu-item" onclick="toggleSubmenu(this)">
+                        <a class="category-link" href="#">Điện thoại</a>
+                        <span class="material-icons">arrow_drop_down</span>
+                    </div>
+                    <ul class="subcategory">
+                        <li><a href="#" class="menu-item">Tai nghe</a></li>
+                        <li><a href="#" class="menu-item">Sạc dự phòng</a></li>
+                        <li><a href="#" class="menu-item">Ốp lưng</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+</th:block>
+
+</html>
+

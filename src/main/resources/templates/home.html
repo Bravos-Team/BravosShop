@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <th:block th:replace="~{toolbox :: category-bar}"></th:block>
+
+    <main class="main-content">
+        <div class="product-section">
+            <h2>Khuyến Mãi Đặc Biệt</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-badge">Giảm 20%</div>
+                    <div class="product-image-container">
+                        <img src="https://placehold.co/250" alt="Sản phẩm 1" class="product-image">
+                        <div class="image-overlay">
+                            <button class="image-detail-btn">Xem Chi Tiết</button>
+                        </div>
+                    </div>
+                    <div class="product-details">
+                        <span class="product-name">iPhone 13 Pro</span>
+                        <span class="product-category">Điện Thoại</span>
+                        <div class="product-actions">
+                            <span class="product-price">22.990.000đ</span>
+                            <button class="add-to-cart-btn">Thêm Giỏ Hàng</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-badge">Giảm 20%</div>
+                    <div class="product-image-container">
+                        <img src="https://placehold.co/250" alt="Sản phẩm 1" class="product-image">
+                        <div class="image-overlay">
+                            <button class="image-detail-btn">Xem Chi Tiết</button>
+                        </div>
+                    </div>
+                    <div class="product-details">
+                        <span class="product-name">iPhone 13 Pro</span>
+                        <span class="product-category">Điện Thoại</span>
+                        <div class="product-actions">
+                            <span class="product-price">22.990.000đ</span>
+                            <button class="add-to-cart-btn">Thêm Giỏ Hàng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</th:block>
+

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order</title>
+</head>
+<th:block layout:fragment="content">
+  <main class="main-content">
+    <div class="profile-container">
+      <!-- Profile Menu -->
+
+      <th:block th:replace="~{toolbox :: profile-menu}"></th:block>
+
+      <!-- Profile Content -->
+      <main class="order-detail">
+        <div class="order-header">
+          <h2 class="section-title">Chi tiết đơn hàng #123456</h2>
+          <span class="order-status processing">Đang xử lý</span>
+        </div>
+
+        <div class="order-progress">
+          <div class="progress-line">
+            <div class="progress-line-filled"></div>
+          </div>
+          <div class="progress-step completed">
+            <div class="step-icon">✓</div>
+            <div>Đặt hàng</div>
+          </div>
+          <div class="progress-step completed">
+            <div class="step-icon">✓</div>
+            <div>Xác nhận</div>
+          </div>
+          <div class="progress-step">
+            <div class="step-icon">3</div>
+            <div>Đang giao</div>
+          </div>
+          <div class="progress-step">
+            <div class="step-icon">4</div>
+            <div>Hoàn thành</div>
+          </div>
+        </div>
+
+        <div class="order-sections">
+          <div>
+            <div class="order-products">
+              <h3>Sản phẩm</h3>
+              <div class="product-item">
+                <img src="https://placehold.co/100" alt="Sản phẩm 1" class="order-product-image">
+                <div class="product-info">
+                  <div class="product-name">Tên sản phẩm 1</div>
+                  <div class="product-variant">Phân loại: Màu đen, Size L</div>
+                  <div class="product-price">
+                    <span>1.200.000đ</span>
+                    <span>x2</span>
+                  </div>
+                </div>
+              </div>
+              <div class="product-item">
+                <img src="https://placehold.co/100" alt="Sản phẩm 2" class="order-product-image">
+                <div class="product-info">
+                  <div class="product-name">Tên sản phẩm 2</div>
+                  <div class="product-variant">Phân loại: Màu trắng, Size M</div>
+                  <div class="product-price">
+                    <span>800.000đ</span>
+                    <span>x1</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="delivery-info">
+              <h3>Thông tin giao hàng</h3> <br>
+              <div class="info-group">
+                <div class="info-label">Người nhận</div>
+                <div>Nguyễn Văn A</div>
+              </div>
+              <div class="info-group">
+                <div class="info-label">Số điện thoại</div>
+                <div>0123456789</div>
+              </div>
+              <div class="info-group">
+                <div class="info-label">Địa chỉ</div>
+                <div>123 Đường ABC, Phường XYZ, Quận 1, TP.HCM</div>
+              </div>
+              <div class="info-group">
+                <div class="info-label">Phương thức vận chuyển</div>
+                <div>Giao hàng nhanh</div>
+              </div>
+              <div class="info-group">
+                <div class="info-label">Thời gian giao dự kiến</div>
+                <div>25/01/2024 - 27/01/2024</div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="order-summary">
+              <h3>Tổng quan đơn hàng</h3>
+              <div class="summary-item">
+                <span class="summary-label">Tổng tiền hàng</span>
+                <span>3.200.000đ</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Phí vận chuyển</span>
+                <span>40.000đ</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Giảm giá</span>
+                <span>-200.000đ</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Tổng thanh toán</span>
+                <span class="total-amount">3.040.000đ</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-label">Phương thức thanh toán</span>
+                <span>Thanh toán khi nhận hàng</span>
+              </div>
+            </div>
+
+            <div class="order-summary">
+              <h3>Lịch sử đơn hàng</h3>
+              <div class="summary-item">
+                <div>
+                  <div>Đã xác nhận đơn hàng</div>
+                  <div class="summary-label">21/01/2024 15:30</div>
+                </div>
+              </div>
+              <div class="summary-item">
+                <div>
+                  <div>Đã đặt hàng</div>
+                  <div class="summary-label">20/01/2024 10:15</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+    </div>
+  </main>
+  <script>
+
+  </script>
+</th:block>
+</html>

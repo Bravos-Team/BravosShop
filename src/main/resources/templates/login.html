@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<th:block layout:fragment="content">
+    <main class="main-content">
+
+        <div id="errorPopup" class="error-popup">
+            Đăng nhập thất bại. Vui lòng kiểm tra lại tên đăng nhập và mật khẩu.
+        </div>
+
+        <div class="login-container" style="margin: 26px auto">
+            <div class="login-header">
+                <h1>Đăng nhập</h1>
+                <img style="margin: 4px auto" class="logo" src="/res/img/logo.svg" alt="logo">
+            </div>
+
+            <form th:action="@{/login}" method="post" class="login-form">
+                <div class="form-group">
+                    <label for="username">Tên đăng nhập hoặc Email</label>
+                    <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Nhập tên đăng nhập hoặc email"
+                            required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Nhập mật khẩu"
+                            required
+                    >
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="login-btn">Đăng Nhập</button>
+
+                <div class="or-divider">HOẶC</div>
+
+                <div id="google-login" class="google-login">
+                    <img class="google-logo" src="/res/img/google.svg" alt="google-logo">
+                    <span>Đăng nhập bằng Google</span>
+                </div>
+
+                <div class="signup-link">
+                    Bạn chưa có tài khoản?
+                    <a href="#">Đăng Ký Ngay</a>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script>
+        document.getElementById("google-login").onclick = function() {
+            window.location.href = "/oauth2/authorization/google";
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorParam = urlParams.get('error');
+
+        if (errorParam) {
+            const errorPopup = document.getElementById('errorPopup');
+            errorPopup.classList.add('show');
+
+            setTimeout(() => {
+                errorPopup.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</th:block>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đổi mật khẩu</title>
+</head>
+<th:block layout:fragment="content">
+  <main class="main-content">
+    <div class="profile-container">
+      <!-- Profile Menu -->
+
+      <th:block th:replace="~{toolbox :: profile-menu}"></th:block>
+
+      <!-- Profile Content -->
+      <main class="profile-content">
+        <h2 class="section-title">Đổi mật khẩu</h2> <br>
+        <div class="profile-section">
+          <form action="" method="POST">
+            <div class="form-group">
+              <label class="form-label">Mật khẩu cũ</label>
+              <input name="oldpassword" type="password" class="form-input">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mật khẩu mới</label>
+              <input name="password" type="password" class="form-input">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Xác nhận mật khẩu</label>
+              <input name="repassword" type="password" class="form-input">
+            </div>
+            <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
+          </form>
+        </div>
+      </main>
+    </div>
+  </main>
+  <script>
+
+  </script>
+</th:block>
+</html>

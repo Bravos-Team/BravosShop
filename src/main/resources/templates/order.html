@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order</title>
+</head>
+<th:block layout:fragment="content">
+  <main class="main-content">
+    <div class="profile-container">
+      <!-- Profile Menu -->
+
+      <th:block th:replace="~{toolbox :: profile-menu}"></th:block>
+
+      <!-- Profile Content -->
+      <main class="orders-list">
+        <h2 class="section-title">Đơn hàng của tôi</h2>
+
+        <div class="order-filters">
+          <button class="filter-btn active">Tất cả</button>
+          <button class="filter-btn">Chờ xác nhận</button>
+          <button class="filter-btn">Đang xử lý</button>
+          <button class="filter-btn">Đang giao</button>
+          <button class="filter-btn">Hoàn thành</button>
+          <button class="filter-btn">Đã hủy</button>
+        </div>
+
+        <div class="order-card">
+          <div class="order-header">
+            <span class="order-id">Đơn hàng #123456</span>
+            <span class="order-status processing">Đang xử lý</span>
+          </div>
+          <div class="order-info">
+            <div class="info-item">
+              <div class="info-label">Ngày đặt</div>
+              <div>20/01/2024</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Tổng tiền</div>
+              <div>2.500.000đ</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Thanh toán</div>
+              <div>Đã thanh toán</div>
+            </div>
+          </div>
+          <div class="order-items">
+            <img src="https://placehold.co/80" alt="Sản phẩm 1" class="item-image">
+            <img src="https://placehold.co/80" alt="Sản phẩm 2" class="item-image">
+            <img src="https://placehold.co/80" alt="Sản phẩm 3" class="item-image">
+          </div>
+          <div class="order-actions">
+            <button class="btn btn-outline">Hủy đơn</button>
+            <button class="btn btn-primary">Xem chi tiết</button>
+          </div>
+        </div>
+
+        <!-- Additional order cards... -->
+      </main>
+      
+    </div>
+  </main>
+  <script>
+
+  </script>
+</th:block>
+</html>

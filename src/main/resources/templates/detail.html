@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Sản Phẩm</title>
+</head>
+
+<th:block layout:fragment="content">
+
+    <th:block th:replace="~{toolbox :: category-bar}"></th:block>
+
+    <main class="main-content">
+        <div class="product-detail-section">
+            <div class="product-detail-container">
+                <!-- Slider hình ảnh sản phẩm -->
+                <div class="product-image-slider">
+                    <div class="slider-main">
+                        <img src="https://placehold.co/400" alt="Sản phẩm" class="slider-image active">
+                        <img src="https://placehold.co/400" alt="Sản phẩm" class="slider-image">
+                        <img src="https://placehold.co/400" alt="Sản phẩm" class="slider-image">
+                    </div>
+                    <div class="slider-thumbnails">
+                        <img src="https://placehold.co/100" alt="Thumbnail 1" class="thumbnail active"
+                             onclick="changeSlide(0)">
+                        <img src="https://placehold.co/100" alt="Thumbnail 2" class="thumbnail"
+                             onclick="changeSlide(1)">
+                        <img src="https://placehold.co/100" alt="Thumbnail 3" class="thumbnail"
+                             onclick="changeSlide(2)">
+                    </div>
+                </div>
+
+                <!-- Thông tin chi tiết sản phẩm -->
+                <div class="product-info">
+                    <h1 class="product-name">iPhone 13 Pro</h1>
+                    <span class="product-category">Điện Thoại</span>
+                    <div class="product-rating">
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star</span>
+                        <span class="material-icons">star_half</span>
+                        <span class="rating-text">4.5 (100 đánh giá)</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="original-price">25.990.000đ</span>
+                        <span class="discounted-price">22.990.000đ</span>
+                        <span class="discount-badge">Giảm 20%</span>
+                    </div>
+
+                    <div class="quantity-control">
+                        <label for="quantity">Số lượng:</label>
+                        <div class="quantity-input">
+                            <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                            <input type="number" id="quantity" value="1" min="1">
+                            <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Nút hành động -->
+                    <div class="product-actions">
+                        <button class="add-to-cart-btn">Thêm vào giỏ hàng</button>
+                        <button class="buy-now-btn">Mua ngay</button>
+                    </div>
+
+                    <!-- Phần mô tả sản phẩm -->
+                    <div class="product-description">
+                        <h3>Mô tả sản phẩm</h3>
+                        <p class="description-text">
+                            iPhone 13 Pro là một trong những điện thoại thông minh cao cấp nhất của Apple với màn hình
+                            Super Retina XDR, chip A15 Bionic, và hệ thống camera chuyên nghiệp. Sản phẩm này mang đến
+                            trải nghiệm tuyệt vời với hiệu năng mạnh mẽ, thiết kế sang trọng và thời lượng pin ấn tượng.
+                            <span id="more-text" class="more-text" style="display: none">
+                                iPhone 13 Pro còn được trang bị công nghệ màn hình ProMotion với tần số quét 120Hz, giúp mọi thao tác trở nên mượt mà hơn. Hệ thống camera mới với ống kính telephoto, góc siêu rộng và chế độ chụp đêm ấn tượng sẽ đáp ứng mọi nhu cầu chụp ảnh của bạn.
+                            </span>
+                        </p>
+                        <button class="read-more-btn" onclick="toggleDescription()">Xem thêm</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider sản phẩm liên quan -->
+            <div class="related-products">
+                <h2>Sản phẩm liên quan</h2>
+                <div class="related-products-slider">
+                    <div class="product-card">
+                        <img src="https://placehold.co/200" alt="Sản phẩm liên quan" class="related-product-image">
+                        <div class="product-details">
+                            <span class="product-name">iPhone 12 Pro</span>
+                            <span class="product-price">18.990.000đ</span>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://placehold.co/200" alt="Sản phẩm liên quan" class="related-product-image">
+                        <div class="product-details">
+                            <span class="product-name">iPhone 14 Pro</span>
+                            <span class="product-price">28.990.000đ</span>
+                        </div>
+                    </div>
+                    <!-- Thêm các sản phẩm liên quan khác -->
+                </div>
+            </div>
+
+            <!-- Form đánh giá -->
+            <div class="review-form">
+                <h3>Viết đánh giá của bạn</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="rating">Đánh giá:</label>
+                        <div id="rating" class="rating-stars">
+                            <span class="material-icons" onclick="setRating(1)">star</span>
+                            <span class="material-icons" onclick="setRating(2)">star</span>
+                            <span class="material-icons" onclick="setRating(3)">star</span>
+                            <span class="material-icons" onclick="setRating(4)">star</span>
+                            <span class="material-icons" onclick="setRating(5)">star</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="review">Nội dung đánh giá:</label>
+                        <textarea id="review" rows="4" placeholder="Viết đánh giá của bạn..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-review-btn">Gửi đánh giá</button>
+                </form>
+            </div>
+
+            <!-- Đánh giá từ người dùng khác -->
+            <div class="product-reviews">
+                <h2>Đánh giá từ người dùng</h2>
+                <div class="review-list">
+                    <div class="review-item">
+                        <div class="reviewer-info">
+                            <span class="reviewer-name">Nguyễn Văn A</span>
+                            <div class="review-rating">
+                                <span class="material-icons">star</span>
+                                <span class="material-icons">star</span>
+                                <span class="material-icons">star</span>
+                                <span class="material-icons">star</span>
+                                <span class="material-icons">star_half</span>
+                            </div>
+                        </div>
+                        <p class="review-content">
+                            Sản phẩm rất tốt, màn hình đẹp, pin trâu. Đáng đồng tiền bát gạo!
+                        </p>
+                        <span class="review-date">Ngày 10/10/2023</span>
+                    </div>
+                    <!-- Thêm các đánh giá khác -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        // Slider hình ảnh
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slider-image');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+
+        function changeSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            thumbnails[currentSlide].classList.remove('active');
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            thumbnails[currentSlide].classList.add('active');
+        }
+
+        // Tăng/giảm số lượng
+        function increaseQuantity() {
+            const quantityInput = document.getElementById('quantity');
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+        }
+
+        function decreaseQuantity() {
+            const quantityInput = document.getElementById('quantity');
+            if (quantityInput.value > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+            }
+        }
+
+        // Đánh giá sao
+        function setRating(rating) {
+            const stars = document.querySelectorAll('.rating-stars .material-icons');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.textContent = 'star';
+                } else {
+                    star.textContent = 'star_border';
+                }
+            });
+        }
+
+        // Xử lý nút "Xem thêm" cho phần mô tả
+        function toggleDescription() {
+            const descriptionText = document.querySelector('.description-text');
+            const readMoreBtn = document.querySelector('.read-more-btn');
+            descriptionText.classList.toggle('expanded');
+            if(descriptionText.classList.contains('expanded')) {
+                readMoreBtn.textContent = 'Thu gọn';
+                document.getElementById('more-text').style.display = 'inline';
+            }
+            else {
+                readMoreBtn.textContent = 'Xem thêm';
+                document.getElementById('more-text').style.display = 'none';
+            }
+        }
+
+    </script>
+</th:block>
