@@ -1,5 +1,6 @@
 package com.bravos2k5.bravosshop.model.invoice;
 
+import com.bravos2k5.bravosshop.enums.OrderStatus;
 import com.bravos2k5.bravosshop.enums.PaymentStatus;
 import com.bravos2k5.bravosshop.model.SnowFlakeId;
 import com.bravos2k5.bravosshop.model.user.User;
@@ -10,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Entity
 @Getter
@@ -29,6 +31,17 @@ public class Invoice implements SnowFlakeId {
 
     @Enumerated(EnumType.ORDINAL)
     @Column(nullable = false)
-    private PaymentStatus status;
+    private PaymentStatus paymentStatus = PaymentStatus.PENDING;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
+    private OrderStatus orderStatus = OrderStatus.PENDING;
+
+    @OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY)
+    private Collection<InvoiceDetail> invoiceDetails;
+
+    public Double total() {
+        return invoiceDetails.stream().mapToDouble(InvoiceDetail::getFinalPrice).sum();
+    }
 
 }

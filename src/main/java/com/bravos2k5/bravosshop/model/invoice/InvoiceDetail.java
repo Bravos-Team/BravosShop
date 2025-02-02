@@ -21,9 +21,22 @@ public class InvoiceDetail implements Serializable {
     @JoinColumn(nullable = false)
     private Product product;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    private Invoice invoice;
+
+    @Column(nullable = false)
     private Double price;
 
+    @Column(nullable = false)
     private Long quantity;
+
+    @Builder.Default
+    private Double discount = 0d;
+
+    public Double getFinalPrice() {
+        return (price - discount) * quantity;
+    }
 
     public Double getTotalPrice() {
         return price * quantity;

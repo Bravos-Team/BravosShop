@@ -20,12 +20,37 @@ public class AdminController {
 
     @GetMapping("/user/detail")
     public String detail() {
-        return "admin/userdetail";
+        return "admin/user-detail";
     }
 
     @GetMapping("/user/address")
     public String address() {
         return "admin/address";
+    }
+
+    @GetMapping("/product")
+    public String product() {
+        return "admin/product";
+    }
+
+    @GetMapping("/product/detail")
+    public String productDetail() {
+        return "admin/product-detail";
+    }
+
+    @GetMapping("/category")
+    public String category() {
+        return "admin/category";
+    }
+
+    @GetMapping("/product/statistic")
+    public String pStatistic() {
+        return "admin/product-statistic";
+    }
+
+    @GetMapping("/general-statistic")
+    public String gStatistic() {
+        return "admin/general-statistic";
     }
 
 }
