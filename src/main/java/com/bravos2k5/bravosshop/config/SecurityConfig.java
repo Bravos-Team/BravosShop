@@ -1,10 +1,17 @@
 package com.bravos2k5.bravosshop.config;
 
+import com.bravos2k5.bravosshop.config.filter.CustomAuthenticationFilter;
+import com.bravos2k5.bravosshop.config.filter.JwtFilter;
+import com.bravos2k5.bravosshop.config.handler.CustomFailureHandler;
+import com.bravos2k5.bravosshop.config.handler.CustomSuccessHandler;
+import com.bravos2k5.bravosshop.service.AuthService;
 import com.bravos2k5.bravosshop.service.CustomOAuth2UserService;
+import com.bravos2k5.bravosshop.service.JwtService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -19,37 +26,59 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomSuccessHandler customSuccessHandler;
+    private final CustomFailureHandler customFailureHandler;
+    private final AuthService authService;
+    private final JwtService jwtService;
 
     @Autowired
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler) {
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService, CustomSuccessHandler customSuccessHandler,
+                          CustomFailureHandler customFailureHandler, AuthService authService, JwtService jwtService) {
         this.customOAuth2UserService = customOAuth2UserService;
         this.customSuccessHandler = customSuccessHandler;
+        this.customFailureHandler = customFailureHandler;
+        this.authService = authService;
+        this.jwtService = jwtService;
     }
 
     @Bean
-    public SecurityFilterChain security(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
+    public JwtFilter jwtFilter() {
+        return new JwtFilter(authService,jwtService);
+    }
+
+    @Bean
+    public CustomAuthenticationFilter customAuthenticationFilter(AuthenticationManager authenticationManager) {
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager);
+        customAuthenticationFilter.setPostOnly(true);
+        customAuthenticationFilter.setFilterProcessesUrl("/p/login");
+        customAuthenticationFilter.setAuthenticationSuccessHandler(customSuccessHandler);
+        customAuthenticationFilter.setAuthenticationFailureHandler(customFailureHandler);
+        return customAuthenticationFilter;
+    }
+
+    @Bean
+    public SecurityFilterChain security(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
 
         http.csrf(CsrfConfigurer::disable);
-        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.oauth2Login(oauth2Login -> {
             oauth2Login.loginPage("/login");
             oauth2Login.userInfoEndpoint(userInfo -> userInfo.userService(this.customOAuth2UserService));
             oauth2Login.successHandler(customSuccessHandler);
+            oauth2Login.failureHandler(customFailureHandler);
         });
 
         http.formLogin(form -> {
             form.loginPage("/login");
-            form.successHandler(customSuccessHandler);
-            form.failureUrl("/login?error=true");
+            form.loginProcessingUrl("/p/login");
+            form.permitAll();
         });
 
         http.logout(logout -> {
             logout.logoutUrl("/logout");
-            logout.permitAll();
             logout.clearAuthentication(true);
             logout.deleteCookies("token");
             logout.logoutSuccessUrl("/home");
+            logout.permitAll();
         });
 
         http.authorizeHttpRequests(request -> {
@@ -60,7 +89,8 @@ public class SecurityConfig {
             request.anyRequest().denyAll();
         });
 
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(customAuthenticationFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtFilter(), CustomAuthenticationFilter.class);
 
         return http.build();
     }

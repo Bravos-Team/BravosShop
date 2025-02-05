@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html layout:decorate="~{user-template}" lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    .verification-container {
+      background-color: var(--secondary-color);
+      border-radius: 8px;
+      padding: 2.5rem;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      margin: 117px auto;
+    }
+
+    .icon-circle {
+      width: 80px;
+      height: 80px;
+      background-color: rgba(156, 39, 176, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+
+    .email-icon {
+      font-size: 2.5rem;
+    }
+
+    .title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+
+    .description {
+      color: #888;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .email-display {
+      background-color: var(--primary-color);
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+      word-break: break-all;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-back {
+      background-color: var(--accent-color);
+      color: white;
+    }
+
+    .btn-back:hover {
+      background-color: var(--hover-color);
+    }
+  </style>
+</head>
+<th:block layout:fragment="content">
+  <main class="main-content">
+    <div class="verification-container">
+      <div class="icon-circle">
+        <span class="email-icon">✉️</span>
+      </div>
+      <h1 class="title">Kiểm tra email của bạn</h1>
+      <p class="description">
+        Chúng tôi đã gửi email xác nhận đến địa chỉ email của bạn.
+        Vui lòng kiểm tra và nhấp vào liên kết trong email để hoàn tất đăng ký.
+      </p>
+      <div th:text="${email}" class="email-display"></div>
+      <a href="/login" class="btn btn-back">Quay lại đăng nhập</a>
+    </div>
+  </main>
+</th:block>
+</html>

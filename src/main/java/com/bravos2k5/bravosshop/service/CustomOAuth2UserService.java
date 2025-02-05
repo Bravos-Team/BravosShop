@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -59,7 +60,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                     .googleId(googleId)
                     .enabled(true)
                     .build();
-            user = userService.createNewUser(user,httpServletRequest);
+            user = userService.createNewUser(user);
         }
         else if (user.getGoogleId() == null){
             user.setGoogleId(googleId);
@@ -68,8 +69,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String,Object> attributes = new HashMap<>(oAuth2User.getAttributes());
         attributes.put("username",user.getUsername());
         attributes.put("displayName",user.getDisplayName());
-        attributes.put("role",user.getAuthorities());
-        return new DefaultOAuth2User(oAuth2User.getAuthorities(),attributes,"sub");
+        return new DefaultOAuth2User(user.getAuthorities(),attributes,"sub");
     }
 
     private String suffixGenerate(String googleId) {

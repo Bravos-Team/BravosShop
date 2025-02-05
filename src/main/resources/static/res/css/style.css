@@ -1825,7 +1825,7 @@ body {
   margin-top: 2rem;
 }
 
-#username:hover {
+#username-f:hover {
   color: var(--hover-color);
 }
 
@@ -1843,4 +1843,10 @@ body {
 }
 .error-popup.show {
   display: block;
+}
+
+.error-line {
+  font-size: 12px;
+  font-style: italic;
+  color: red;
 }

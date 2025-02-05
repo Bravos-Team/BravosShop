@@ -18,7 +18,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user;
-        if(username.matches("^([\\w-.]+){1,64}@(\\w&&[^_]+){2,255}.[a-z]{2,}$")) {
+        String emailRegex = "^[\\p{Alnum}_+&*-]+(?:\\.[\\p{Alnum}_+&*-]+)*@(?:[\\p{Alnum}-]+\\.)+\\p{Alpha}{2,7}$";
+        if(username.matches(emailRegex)) {
             user = userService.findByEmail(username);
         } else {
             user = userService.findByUsername(username);

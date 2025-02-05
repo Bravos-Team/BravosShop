@@ -1,5 +1,6 @@
-package com.bravos2k5.bravosshop.config;
+package com.bravos2k5.bravosshop.config.filter;
 
+import com.bravos2k5.bravosshop.config.security.JwtAuthenticationToken;
 import com.bravos2k5.bravosshop.dto.TokenInfo;
 import com.bravos2k5.bravosshop.service.AuthService;
 import com.bravos2k5.bravosshop.service.JwtService;
@@ -9,12 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private final AuthService authService;
@@ -31,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         String uri = request.getRequestURI();
-        if(uri.startsWith("/res") || uri.startsWith("/login")) {
+        if(uri.startsWith("/res") || uri.startsWith("/error")) {
             filterChain.doFilter(request,response);
             return;
         }

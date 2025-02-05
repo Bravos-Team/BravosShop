@@ -9,16 +9,15 @@
     <main class="main-content">
 
         <div id="errorPopup" class="error-popup">
-            Đăng nhập thất bại. Vui lòng kiểm tra lại tên đăng nhập và mật khẩu.
         </div>
 
-        <div class="login-container" style="margin: 26px auto">
+        <div class="login-container" style="margin: 24px auto">
             <div class="login-header">
                 <h1>Đăng nhập</h1>
                 <img style="margin: 4px auto" class="logo" src="/res/img/logo.svg" alt="logo">
             </div>
 
-            <form th:action="@{/login}" method="post" class="login-form">
+            <form th:action="@{/p/login}" method="post" class="login-form">
                 <div class="form-group">
                     <label for="username">Tên đăng nhập hoặc Email</label>
                     <input
@@ -56,7 +55,7 @@
 
                 <div class="signup-link">
                     Bạn chưa có tài khoản?
-                    <a href="#">Đăng Ký Ngay</a>
+                    <a href="/p/register">Đăng Ký Ngay</a>
                 </div>
             </form>
         </div>
@@ -71,12 +70,21 @@
 
         if (errorParam) {
             const errorPopup = document.getElementById('errorPopup');
+            if(errorParam == -1) {
+                errorPopup.innerHTML = 'Đăng nhập thất bại. Vui lòng kiểm tra lại tên đăng nhập và mật khẩu';
+            }
+            else if(errorParam == 1) {
+                errorPopup.innerHTML = 'Tài khoản chưa được kích hoạt';
+            }
+            else if(errorParam == 2) {
+                errorPopup.innerHTML = 'Tài khoản bị khóa. Liên hệ admin để biết thêm thông tin chi tiết';
+            }
             errorPopup.classList.add('show');
-
             setTimeout(() => {
                 errorPopup.classList.remove('show');
             }, 3000);
         }
+
     </script>
 </th:block>
 </html>

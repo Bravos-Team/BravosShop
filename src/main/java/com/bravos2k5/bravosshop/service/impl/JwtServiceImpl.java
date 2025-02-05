@@ -6,12 +6,12 @@ import com.bravos2k5.bravosshop.service.JwtService;
 import com.bravos2k5.bravosshop.utils.KeyLoader;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -88,8 +88,9 @@ public class JwtServiceImpl implements JwtService {
     public TokenInfo getTokenInfo(String token) {
         Claims claims = extractAllClaims(token);
         if(claims != null) {
-            return new TokenInfo(claims.getSubject(),claims.get("name", String.class),
-                    (java.util.Collection<? extends org.springframework.security.core.GrantedAuthority>) claims.get("role", Collection.class));
+            List<Map> roles = claims.get("role", List.class);
+            String role = (String) roles.stream().toList().getFirst().get("authority");
+            return new TokenInfo(claims.getSubject(),claims.get("name", String.class), List.of(new SimpleGrantedAuthority(role)));
         }
         return null;
     }

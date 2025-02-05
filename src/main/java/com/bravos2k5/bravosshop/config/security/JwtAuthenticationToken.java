@@ -1,8 +1,11 @@
-package com.bravos2k5.bravosshop.config;
+package com.bravos2k5.bravosshop.config.security;
 
+import com.bravos2k5.bravosshop.dto.TokenInfo;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.security.Principal;
+import java.util.Collection;
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
@@ -25,5 +28,9 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         return principal;
     }
 
-
+    @Override
+    public Collection<GrantedAuthority> getAuthorities() {
+        TokenInfo tokenInfo = (TokenInfo) getPrincipal();
+        return tokenInfo.getRole();
+    }
 }

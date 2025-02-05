@@ -16,6 +16,6 @@ public class TokenInfo implements Serializable, Principal {
 
     String username;
     String name;
-    Collection<? extends GrantedAuthority> role;
+    Collection<GrantedAuthority> role;
 
 }

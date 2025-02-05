@@ -4,10 +4,10 @@ import com.bravos2k5.bravosshop.model.cart.Cart;
 import com.bravos2k5.bravosshop.model.user.User;
 import com.bravos2k5.bravosshop.repo.CartRepository;
 import com.bravos2k5.bravosshop.repo.UserRepository;
+import com.bravos2k5.bravosshop.service.CookieService;
 import com.bravos2k5.bravosshop.service.UserService;
 import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,29 +19,29 @@ public class UserServiceImpl implements UserService {
     private final IdentifyGenerator identifyGenerator;
     private final CartRepository cartRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final CookieService cookieService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, IdentifyGenerator identifyGenerator,
-                           CartRepository cartRepository, BCryptPasswordEncoder passwordEncoder) {
+                           CartRepository cartRepository, BCryptPasswordEncoder passwordEncoder, CookieService cookieService) {
         this.userRepository = userRepository;
         this.identifyGenerator = identifyGenerator;
         this.cartRepository = cartRepository;
         this.passwordEncoder = passwordEncoder;
+        this.cookieService = cookieService;
     }
 
     @Override
-    public User createNewUser(User user, HttpServletRequest request) {
+    public User createNewUser(User user) {
         if (userRepository.existsByEmailOrUsername(user.getEmail(),user.getUsername())) {
             return null;
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Cookie cartCookie = cookieService.getCookie("cart");
         String cartId = null;
-        for(Cookie cookie : request.getCookies()) {
-            if(cookie.getName().equals("cartId")) {
-                cartId = cookie.getValue();
-            }
+        if(cartCookie != null) {
+            cartId = cartCookie.getValue();
         }
-        if(cartId == null) {
+        if(cartId == null || cartId.isBlank()) {
             user.setCart(new Cart(identifyGenerator.generateId(1), user));
         }
         else {
@@ -53,6 +53,9 @@ public class UserServiceImpl implements UserService {
                 cart.setUser(user);
             }
             user.setCart(cart);
+        }
+        if (user.getId() == null) {
+            user.setId(identifyGenerator.generateId(1));
         }
         return userRepository.saveAndFlush(user);
     }
@@ -81,15 +84,22 @@ public class UserServiceImpl implements UserService {
     public User updateUserIfExist(User user) {
         User userExist = userRepository.findById(user.getId()).orElse(null);
         if(userExist == null) return null;
-        if(userExist.getUsername() != null) userExist.setUsername(user.getUsername());
-        if(userExist.getEmail() != null) userExist.setEmail(user.getEmail());
-        if(userExist.getPhone() != null) userExist.setPhone(user.getPhone());
-        if(userExist.getDefaultAddress() != null) userExist.setDefaultAddress(user.getDefaultAddress());
-        if(userExist.getAddresses() != null) userExist.setAddresses(user.getAddresses());
-        if(userExist.getGoogleId() != null) userExist.setGoogleId(user.getGoogleId());
-        if(userExist.getEnabled() != null) userExist.setEnabled(user.getEnabled());
-        if(userExist.getStatus() != null) userExist.setStatus(user.getStatus());
+        if(user.getUsername() != null) userExist.setUsername(user.getUsername());
+        if(user.getEmail() != null) userExist.setEmail(user.getEmail());
+        if(user.getDisplayName() != null) userExist.setDisplayName(user.getDisplayName());
+        if(user.getBirthDate() != null) userExist.setBirthDate(user.getBirthDate());
+        if(user.getPhone() != null) userExist.setPhone(user.getPhone());
+        if(user.getDefaultAddress() != null) userExist.setDefaultAddress(user.getDefaultAddress());
+        if(user.getAddresses() != null) userExist.setAddresses(user.getAddresses());
+        if(user.getGoogleId() != null) userExist.setGoogleId(user.getGoogleId());
+        if(user.getEnabled() != null) userExist.setEnabled(user.getEnabled());
+        if(user.getStatus() != null) userExist.setStatus(user.getStatus());
         return userRepository.saveAndFlush(userExist);
+    }
+
+    @Override
+    public boolean existByUsernameOrEmail(String username, String email) {
+        return userRepository.existsByEmailOrUsername(email,username);
     }
 
 

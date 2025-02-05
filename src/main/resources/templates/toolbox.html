@@ -20,11 +20,12 @@
             <th:block sec:authorize="isAuthenticated()">
                 <div class="user-menu" onclick="toggleUserMenu()">
                     <div class="user-menu-trigger">
-                        <b id="username" th:text="${#authentication.principal.name}"></b>
+                        <b id="username-f" th:text="${#authentication.principal.name}"></b>
                     </div>
                     <div class="dropdown" id="userDropdown">
                         <a href="/r/profile">Thông tin tài khoản</a>
                         <a href="/r/orders">Đơn hàng của tôi</a>
+                        <a sec:authorize="hasRole('ADMIN')" href="/p/admin">Quản trị viên</a>
                         <a href="/logout">Đăng xuất</a>
                     </div>
                 </div>

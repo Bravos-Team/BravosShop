@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Rầy rà một chút!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .error-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 500px;
+        }
+        .error-emoji {
+            font-size: 100px;
+            margin-bottom: 20px;
+        }
+        .error-title {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .error-message {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+        .retry-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .retry-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="error-container">
+    <div class="error-emoji">🤪</div>
+    <h1 class="error-title">Ối! Đã có lỗi xảy ra</h1>
+    <p class="error-message">Có vẻ như bạn đang lầm đường lạc lối ở đâu đó. Cần chúng tôi đưa bạn về nhà hem?</p>
+    <button class="retry-button" onclick="goHome()">Lemme cook</button>
+</div>
+</body>
+<script>
+    function goHome() {
+        window.location.href = "/home";
+    }
+</script>
+</html>
