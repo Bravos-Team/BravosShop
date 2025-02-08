@@ -1,7 +1,7 @@
 package com.bravos2k5.bravosshop.service;
 
-import com.bravos2k5.bravosshop.dto.RegisterDto;
-import com.bravos2k5.bravosshop.dto.TokenInfo;
+import com.bravos2k5.bravosshop.dto.register.RegisterDto;
+import com.bravos2k5.bravosshop.config.security.TokenInfo;
 import com.bravos2k5.bravosshop.model.user.User;
 
 public interface AuthService {

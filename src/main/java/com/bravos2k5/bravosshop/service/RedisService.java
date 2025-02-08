@@ -14,6 +14,8 @@ public interface RedisService {
 
     boolean saveIfAbsent(String key, Object value, long timeout, TimeUnit timeUnit);
 
+    boolean hasKey(String key);
+
     <T> T get(String key);
 
     <T> List<T> multiGet(Collection<String> key);

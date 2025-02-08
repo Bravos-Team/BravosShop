@@ -1,4 +1,4 @@
-package com.bravos2k5.bravosshop.dto;
+package com.bravos2k5.bravosshop.config.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

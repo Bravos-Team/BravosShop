@@ -1,10 +1,12 @@
 package com.bravos2k5.bravosshop.controller;
 
-import com.bravos2k5.bravosshop.dto.RegisterDto;
+import com.bravos2k5.bravosshop.dto.register.RegisterDto;
 import com.bravos2k5.bravosshop.service.AuthService;
 import com.bravos2k5.bravosshop.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -25,7 +27,8 @@ public class RegisterController {
 
     @GetMapping
     public String register(Model model, @ModelAttribute("registerDto") RegisterDto registerDto) {
-        return "register";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return !authentication.isAuthenticated() ? "register" : "home";
     }
 
     @PostMapping

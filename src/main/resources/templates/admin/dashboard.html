@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi" layout:decorate="~{admin-template}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <main layout:fragment="content" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Dashboard</h1>
+        </div>
+
+        <!-- Cards -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Người dùng</div>
+                    <div class="card-body">
+                        <h5 class="card-title">1,024</h5>
+                        <p class="card-text">Tổng số người dùng</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Sản phẩm</div>
+                    <div class="card-body">
+                        <h5 class="card-title">5,678</h5>
+                        <p class="card-text">Tổng số sản phẩm</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-header">Đơn hàng</div>
+                    <div class="card-body">
+                        <h5 class="card-title">1,234</h5>
+                        <p class="card-text">Tổng số đơn hàng</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-header">Doanh thu</div>
+                    <div class="card-body">
+                        <h5 class="card-title">$12,345</h5>
+                        <p class="card-text">Tổng doanh thu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row">
+            <div class="col-md-6">
+                <canvas id="salesChart" width="400" height="200"></canvas>
+            </div>
+            <div class="col-md-6">
+                <canvas id="usersChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.bravos2k5.bravosshop.dto;
+package com.bravos2k5.bravosshop.dto.register;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

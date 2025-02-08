@@ -1,7 +1,7 @@
 package com.bravos2k5.bravosshop.service.impl;
 
 
-import com.bravos2k5.bravosshop.dto.TokenInfo;
+import com.bravos2k5.bravosshop.config.security.TokenInfo;
 import com.bravos2k5.bravosshop.service.JwtService;
 import com.bravos2k5.bravosshop.utils.KeyLoader;
 import io.jsonwebtoken.*;

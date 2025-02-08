@@ -1,6 +1,6 @@
 package com.bravos2k5.bravosshop.config.handler;
 
-import com.bravos2k5.bravosshop.dto.TokenInfo;
+import com.bravos2k5.bravosshop.config.security.TokenInfo;
 import com.bravos2k5.bravosshop.model.user.User;
 import com.bravos2k5.bravosshop.service.AuthService;
 import jakarta.servlet.ServletException;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 @Component
 public class CustomSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {

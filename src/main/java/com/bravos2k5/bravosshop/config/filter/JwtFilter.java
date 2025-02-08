@@ -1,7 +1,7 @@
 package com.bravos2k5.bravosshop.config.filter;
 
 import com.bravos2k5.bravosshop.config.security.JwtAuthenticationToken;
-import com.bravos2k5.bravosshop.dto.TokenInfo;
+import com.bravos2k5.bravosshop.config.security.TokenInfo;
 import com.bravos2k5.bravosshop.service.AuthService;
 import com.bravos2k5.bravosshop.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -44,8 +44,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 return;
             }
             JwtAuthenticationToken authenticated = new JwtAuthenticationToken(token,tokenInfo);
-            SecurityContextHolder.getContext().setAuthentication(authenticated);
             authenticated.setAuthenticated(true);
+            SecurityContextHolder.getContext().setAuthentication(authenticated);
         }
         filterChain.doFilter(request,response);
 

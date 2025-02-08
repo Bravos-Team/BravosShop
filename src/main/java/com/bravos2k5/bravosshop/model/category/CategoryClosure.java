@@ -3,6 +3,8 @@ package com.bravos2k5.bravosshop.model.category;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @Setter
@@ -26,5 +28,17 @@ public class CategoryClosure {
 
     @Column(nullable = false)
     private Integer depth;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        CategoryClosure that = (CategoryClosure) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 
 }
