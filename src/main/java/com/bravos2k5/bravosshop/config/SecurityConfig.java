@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AnonymousConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -59,6 +60,9 @@ public class SecurityConfig {
     public SecurityFilterChain security(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
 
         http.csrf(CsrfConfigurer::disable);
+        http.sessionManagement(session -> {
+           session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+        });
 
         http.oauth2Login(oauth2Login -> {
             oauth2Login.loginPage("/login");
@@ -82,6 +86,7 @@ public class SecurityConfig {
         });
 
         http.authorizeHttpRequests(request -> {
+            request.requestMatchers("/actuator").permitAll();
             request.requestMatchers("/res/**").permitAll();
             request.requestMatchers("/p/**", "/","/login","/error").permitAll();
             request.requestMatchers("/r/**").authenticated();

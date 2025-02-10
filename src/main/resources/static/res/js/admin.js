@@ -56,11 +56,22 @@ const usersChart = new Chart(document.getElementById('usersChart'), {
     }
 });
 
-// Sample function to handle search and filter
-document.querySelector('.btn-primary').addEventListener('click', function() {
-    const searchTerm = document.querySelector('.form-control').value;
-    const statusFilter = document.querySelector('.form-select').value;
-    // Perform search and filter logic here
-    console.log('Search Term:', searchTerm);
-    console.log('Status Filter:', statusFilter);
-});
+function showDefNotification() {
+    let messageDiv = document.getElementById('message');
+    if(messageDiv) {
+        let message = messageDiv.textContent;
+        document.getElementById('message-content').textContent = message;
+        if(message && message.length > 0) {
+            var myModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+            myModal.show();
+        }
+    }
+}
+
+function showNotification(message) {
+    document.getElementById('message-content').textContent = message;
+    var myModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+    myModal.show();
+}
+
+

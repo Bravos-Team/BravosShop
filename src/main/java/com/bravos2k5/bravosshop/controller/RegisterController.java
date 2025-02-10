@@ -5,6 +5,7 @@ import com.bravos2k5.bravosshop.service.AuthService;
 import com.bravos2k5.bravosshop.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,7 +29,10 @@ public class RegisterController {
     @GetMapping
     public String register(Model model, @ModelAttribute("registerDto") RegisterDto registerDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return !authentication.isAuthenticated() ? "register" : "home";
+        if(authentication instanceof AnonymousAuthenticationToken) {
+            return "register";
+        }
+        return "redirect:/home";
     }
 
     @PostMapping

@@ -1,5 +1,6 @@
 package com.bravos2k5.bravosshop.service;
 
+import com.bravos2k5.bravosshop.dto.category.CategoryAdminDto;
 import com.bravos2k5.bravosshop.dto.category.CreateCategoryDto;
 import com.bravos2k5.bravosshop.dto.category.CategoryTree;
 import com.bravos2k5.bravosshop.dto.category.UpdateCategoryDto;
@@ -13,8 +14,10 @@ public interface CategoryService {
 
     List<CategoryTree> getCategoryTreeWithLock();
 
-    Category update(UpdateCategoryDto category);
+    void update(UpdateCategoryDto category);
 
     Category create(CreateCategoryDto category, Integer parentId);
+
+    List<CategoryAdminDto> getAllCategoryDto();
 
 }

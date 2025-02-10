@@ -1,8 +1,10 @@
 package com.bravos2k5.bravosshop.service.impl;
 
+import com.bravos2k5.bravosshop.dto.category.CategoryAdminDto;
 import com.bravos2k5.bravosshop.dto.category.CreateCategoryDto;
 import com.bravos2k5.bravosshop.dto.category.CategoryTree;
 import com.bravos2k5.bravosshop.dto.category.UpdateCategoryDto;
+import com.bravos2k5.bravosshop.exception.DatabaseExecException;
 import com.bravos2k5.bravosshop.model.category.Category;
 import com.bravos2k5.bravosshop.model.category.CategoryClosure;
 import com.bravos2k5.bravosshop.repo.CategoryClosureRepository;
@@ -13,12 +15,12 @@ import com.bravos2k5.bravosshop.utils.RandomUtils;
 import com.bravos2k5.bravosshop.utils.SlugUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -105,10 +107,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category update(UpdateCategoryDto categoryDto) {
+    public void update(UpdateCategoryDto categoryDto) {
         Category category = categoryRepository.findById(categoryDto.getId()).orElse(null);
         if(category == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Category ID not exist");
         }
 
         if(!category.getName().equalsIgnoreCase(categoryDto.getName())) {
@@ -125,12 +127,19 @@ public class CategoryServiceImpl implements CategoryService {
         category = categoryRepository.saveAndFlush(category);
 
         Integer newParentId = categoryDto.getParentId();
-        Integer oldParentId = categoryRepository.findParent(category.getId());
-        if(!newParentId.equals(oldParentId)) {
-            categoryRepository.updateParentCategory(category.getId(),newParentId);
+        Integer oldParentId = categoryRepository.findParent(category.getId()).orElse(null);
+
+        if(!Objects.equals(newParentId,oldParentId)) {
+            try {
+                categoryRepository.updateParentCategory(category.getId(), Optional.ofNullable(newParentId));
+            } catch (DataAccessException e) {
+                if(e.getRootCause() != null) {
+                    throw new DatabaseExecException(e.getRootCause().getMessage());
+                }
+                throw new DatabaseExecException("Error when executing this command");
+            }
         }
-        log.info("Category: ${} updated", categoryDto.getId());
-        return category;
+        log.info("Category: {} updated", categoryDto.getId());
     }
 
     @Override
@@ -148,6 +157,11 @@ public class CategoryServiceImpl implements CategoryService {
                 category.getName(),slug,
                 category.getDescription(), parentId);
         return categoryRepository.findBySlug(slug);
+    }
+
+    @Override
+    public List<CategoryAdminDto> getAllCategoryDto() {
+        return categoryRepository.getAllCategoryDto();
     }
 
 }

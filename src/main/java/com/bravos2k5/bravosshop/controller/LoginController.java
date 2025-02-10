@@ -1,5 +1,6 @@
 package com.bravos2k5.bravosshop.controller;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,10 @@ public class LoginController {
     @GetMapping
     public String login() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return !authentication.isAuthenticated() ? "login" : "redirect:/home";
+        if(authentication instanceof AnonymousAuthenticationToken) {
+            return "login";
+        }
+        return "redirect:/home";
     }
 
 }

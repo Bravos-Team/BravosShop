@@ -30,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         String uri = request.getRequestURI();
-        if(uri.startsWith("/res") || uri.startsWith("/error")) {
+        if(uri.startsWith("/res") || uri.startsWith("/error") || uri.startsWith("/actuator")) {
             filterChain.doFilter(request,response);
             return;
         }
