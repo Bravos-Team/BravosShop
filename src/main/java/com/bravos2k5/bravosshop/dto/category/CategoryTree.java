@@ -24,6 +24,8 @@ public class CategoryTree implements Serializable {
 
     private List<CategoryTree> children = new ArrayList<>();
 
+    private boolean root = false;
+
     public CategoryTree(Category category) {
         this.id = category.getId();
         this.name = category.getName();

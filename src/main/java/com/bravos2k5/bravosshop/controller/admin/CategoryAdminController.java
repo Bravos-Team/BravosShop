@@ -5,10 +5,7 @@ import com.bravos2k5.bravosshop.dto.category.UpdateCategoryDto;
 import com.bravos2k5.bravosshop.service.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -41,6 +38,19 @@ public class CategoryAdminController {
 
     @PostMapping("/add")
     public String addCategory(@ModelAttribute CreateCategoryDto createCategoryDto, RedirectAttributes redirectAttributes) {
+        String message = "Success";
+        try {
+            categoryService.create(createCategoryDto);
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
+        redirectAttributes.addFlashAttribute("message",message);
+        return "redirect:/a/category";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteCategory(@PathVariable("id") String id) {
+        String message = "Success";
 
         return "redirect:/a/category";
     }

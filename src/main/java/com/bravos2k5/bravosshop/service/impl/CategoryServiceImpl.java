@@ -16,15 +16,15 @@ import com.bravos2k5.bravosshop.utils.SlugUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
+@RequestScope
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -93,7 +93,10 @@ public class CategoryServiceImpl implements CategoryService {
                 Category category = categoryClosure.getAncestor();
                 CategoryTree categoryTree = new CategoryTree(category);
                 categoryTreeMap.put(category.getId(),categoryTree);
-                if(category.getRoot()) roots.add(categoryTree);
+                if(category.getRoot()) {
+                    categoryTree.setRoot(true);
+                    roots.add(categoryTree);
+                }
             }
         }
 
@@ -139,29 +142,58 @@ public class CategoryServiceImpl implements CategoryService {
                 throw new DatabaseExecException("Error when executing this command");
             }
         }
+
+        redisService.delete("categoryTree");
+
         log.info("Category: {} updated", categoryDto.getId());
     }
 
     @Override
-    public Category create(CreateCategoryDto category, Integer parentId) {
+    public void create(CreateCategoryDto category) {
         String slug = SlugUtils.toSlug(category.getName());
-        boolean isParentExist = categoryRepository.existsById(parentId);
-        if(!isParentExist) {
-            throw new IllegalArgumentException("ParentId is not exist");
+
+        if (category.getParentId() != null) {
+            boolean isParentExist = categoryRepository.existsById(category.getParentId());
+            if(!isParentExist) {
+                throw new IllegalArgumentException("ParentId is not exist");
+            }
         }
+
         boolean isSlugExist = categoryRepository.existsBySlug(slug);
         if(isSlugExist) {
             slug = slug.concat("-").concat(RandomUtils.randomString(3));
         }
-        categoryRepository.createCategory(
-                category.getName(),slug,
-                category.getDescription(), parentId);
-        return categoryRepository.findBySlug(slug);
+
+        try {
+            categoryRepository.createCategory(
+                    category.getName(),slug,
+                    category.getDescription(), category.getParentId());
+        } catch (DataAccessException e) {
+            if(e.getRootCause() != null) {
+                throw new DatabaseExecException(e.getRootCause().getMessage());
+            }
+            throw new DatabaseExecException("Error when executing this command");
+        }
+
+        redisService.delete("categoryTree");
+
+    }
+
+    @Override
+    public void delete(Integer id) {
+        try {
+            categoryRepository.delete(id);
+        } catch (DataAccessException e) {
+            if(e.getRootCause() != null) {
+                throw new DatabaseExecException(e.getRootCause().getMessage());
+            }
+            throw new DatabaseExecException("Error when executing this command");
+        }
+        redisService.delete("categoryTree");
     }
 
     @Override
     public List<CategoryAdminDto> getAllCategoryDto() {
         return categoryRepository.getAllCategoryDto();
     }
-
 }

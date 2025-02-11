@@ -93,50 +93,25 @@
     <aside class="sidebar">
         <nav class="category-menu">
             <ul>
-                <li>
+                <li th:each="categoryTree : ${@categoryServiceImpl.getCategoryTreeWithLock()}">
                     <div class="menu-item" onclick="toggleSubmenu(this)">
-                        <a class="category-link" href="#">Điện thoại</a>
-                        <span class="material-icons">arrow_drop_down</span>
+                        <a class="category-link" th:text="${categoryTree.name}" th:href="@{'p/product/category/' + ${categoryTree.slug}}"></a>
+                        <span th:if="${!categoryTree.getChildren().isEmpty()}" class="material-icons">arrow_drop_down</span>
                     </div>
-                    <ul class="subcategory">
-                        <li>
+                    <ul th:with="children=${categoryTree.children}" th:fragment="recursive" class="subcategory">
+                        <li th:each="child : ${children}">
                             <div class="menu-item" onclick="toggleSubmenu(this)">
-                                <a class="category-link" href="#">Iphone</a>
-                                <span class="material-icons">arrow_drop_down</span>
+                                <a th:text="${child.name}" th:href="@{'p/product/category/' + ${child.slug}}" class="category-link"></a>
+                                <span th:if="${!child.getChildren().isEmpty()}" class="material-icons">arrow_drop_down</span>
                             </div>
-                            <ul class="subcategory">
-                                <li><a href="#" class="menu-item">Iphone 8</a></li>
-                                <li><a href="#" class="menu-item">Iphone X</a></li>
-                            </ul>
+                            <ul th:include="~{toolbox :: recursive}" th:with="children=${child.getChildren()}" class="subcategory"></ul>
                         </li>
-                        <li><a href="#" class="menu-item">Samsung</a></li>
-                        <li><a href="#" class="menu-item">Xiaomi</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <div class="menu-item" onclick="toggleSubmenu(this)">
-                        <a class="category-link" href="#">Điện thoại</a>
-                        <span class="material-icons">arrow_drop_down</span>
-                    </div>
-                    <ul class="subcategory">
-                        <li><a href="#" class="menu-item">Gaming</a></li>
-                        <li><a href="#" class="menu-item">Văn phòng</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <div class="menu-item" onclick="toggleSubmenu(this)">
-                        <a class="category-link" href="#">Điện thoại</a>
-                        <span class="material-icons">arrow_drop_down</span>
-                    </div>
-                    <ul class="subcategory">
-                        <li><a href="#" class="menu-item">Tai nghe</a></li>
-                        <li><a href="#" class="menu-item">Sạc dự phòng</a></li>
-                        <li><a href="#" class="menu-item">Ốp lưng</a></li>
                     </ul>
                 </li>
             </ul>
         </nav>
     </aside>
+
 </th:block>
 
 </html>

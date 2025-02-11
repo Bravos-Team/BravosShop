@@ -16,7 +16,9 @@ public interface CategoryService {
 
     void update(UpdateCategoryDto category);
 
-    Category create(CreateCategoryDto category, Integer parentId);
+    void create(CreateCategoryDto category);
+
+    void delete(Integer id);
 
     List<CategoryAdminDto> getAllCategoryDto();
 

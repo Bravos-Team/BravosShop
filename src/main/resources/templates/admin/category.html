@@ -43,7 +43,7 @@
                 <tr th:each="category : ${categories}" th:data-parent-category="${category.parentId}">
                     <td th:text="${category.name}"></td>
                     <td th:text="${category.parentName}"></td>
-                    <td th:text="${category.description}"></td>
+                    <td style="white-space: normal; max-width: 300px" th:text="${category.description}"></td>
                     <td>
                         <button class="btn btn-sm btn-warning edit-btn"
                                 data-bs-toggle="modal"
@@ -54,8 +54,9 @@
                                 th:data-description="${category.description}">
                             Sửa
                         </button>
-
-                        <button class="btn btn-sm btn-danger">Xóa</button>
+                        <form hidden="hidden" th:action="@{'/a/category/delete/' + ${category.id}}">
+                        </form>
+                        <button  class="btn btn-sm btn-danger">Xóa</button>
                     </td>
                 </tr>
             </tbody>
@@ -70,27 +71,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="/a/category/add" method="POST">
+                    <form id="add-form" action="/a/category/add" method="POST">
                         <div class="mb-3">
                             <label for="categoryName" class="form-label">Tên danh mục</label>
-                            <input type="text" class="form-control" id="categoryName" required>
+                            <input name="name" type="text" class="form-control" id="categoryName" required>
                         </div>
                         <div class="mb-3">
                             <label for="parentCategory" class="form-label">Danh mục cha</label>
                             <select name="parentId" class="form-select" id="parentCategory">
                                 <option selected value="">Không có</option>
-                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">Điện thoại</option>
+                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="categoryDescription" class="form-label">Mô tả</label>
-                            <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+                            <textarea name="description" class="form-control" id="categoryDescription" rows="3"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary">Lưu</button>
+                    <button id="addBtn" type="submit" class="btn btn-primary">Lưu</button>
                 </div>
             </div>
         </div>
@@ -142,6 +143,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             const editButtons = document.querySelectorAll(".edit-btn");
             const editForm = document.getElementById("edit-form");
+            const addForm = document.getElementById("add-form");
 
             editButtons.forEach(button => {
                 button.addEventListener("click", function () {
@@ -163,6 +165,10 @@
                 } else {
                     editForm.submit();
                 }
+            });
+
+            document.getElementById("addBtn").addEventListener("click", function () {
+                addForm.submit();
             });
 
         });
