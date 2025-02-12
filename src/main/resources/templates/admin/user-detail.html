@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Admin Dashboard</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -88,33 +89,35 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">ID:</label>
-                                <p class="form-control-plaintext">#12345</p>
+                                <p class="form-control-plaintext" th:text="${user.id}"></p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Username:</label>
-                                <p class="form-control-plaintext">user1</p>
+                                <p class="form-control-plaintext" th:text="${user.username}"></p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Email:</label>
-                                <p class="form-control-plaintext">user1@example.com</p>
+                                <p class="form-control-plaintext" th:text="${user.email}"></p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Google ID:</label>
-                                <p class="form-control-plaintext">google_123456789</p>
+                                <p class="form-control-plaintext" th:text="${user.googleId}"></p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Tên:</label>
-                                <p class="form-control-plaintext">Nguyễn Văn A</p>
+                                <p class="form-control-plaintext" th:text="${user.displayName}"></p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Ngày sinh:</label>
-                                <p class="form-control-plaintext">01/01/1990</p>
+                                <p class="form-control-plaintext" th:text="${user.birthDate}"></p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Địa chỉ giao hàng mặc định:</label>
-                                <p class="form-control-plaintext">123 Đường ABC, Phường XYZ, Quận 1, TP.HCM</p>
+                                <p class="form-control-plaintext"
+                                   th:text="${user.defaultAddress.street} + ', ' + ${user.defaultAddress.ward} + ', ' + ${user.defaultAddress.district} + ', ' + ${user.defaultAddress.city}">
+                                </p>
                             </div>
                             <div class="mb-3">
                                 <button class="btn btn-primary">Quản lý địa chỉ</button>

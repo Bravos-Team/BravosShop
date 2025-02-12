@@ -1,0 +1,45 @@
+package com.bravos2k5.bravosshop.controller.admin;
+
+
+import com.bravos2k5.bravosshop.dto.user.UserAdminDto;
+import com.bravos2k5.bravosshop.model.user.User;
+import com.bravos2k5.bravosshop.service.impl.UserServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+@RequestMapping("a/users")
+public class UserAdminController {
+
+
+    private final static int PAGE_SIZE = 1;
+
+    private final UserServiceImpl userServiceImpl;
+
+    public UserAdminController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
+    }
+
+    @GetMapping
+    public String user(@RequestParam(defaultValue = "1") int page,
+                       Model model) {
+        Page<UserAdminDto> userAdminDtoPage = userServiceImpl.getAllAdminUserDto(page, PAGE_SIZE);
+        model.addAttribute("users", userAdminDtoPage);
+        model.addAttribute("currentPage", page);
+        return "admin/user";
+    }
+
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") Long id, Model model) {
+
+
+        User user = userServiceImpl.findById(id);
+        model.addAttribute("user", user);
+        return "admin/user-detail";
+    }
+}
