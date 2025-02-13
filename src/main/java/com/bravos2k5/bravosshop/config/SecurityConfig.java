@@ -43,7 +43,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtFilter jwtFilter() {
-        return new JwtFilter(authService,jwtService);
+        return new JwtFilter(authService, jwtService);
     }
 
     @Bean
@@ -61,7 +61,7 @@ public class SecurityConfig {
 
         http.csrf(CsrfConfigurer::disable);
         http.sessionManagement(session -> {
-           session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+            session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
         });
 
         http.oauth2Login(oauth2Login -> {
@@ -87,8 +87,9 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(request -> {
             request.requestMatchers("/actuator").permitAll();
+            request.requestMatchers("/**").permitAll();
             request.requestMatchers("/res/**").permitAll();
-            request.requestMatchers("/p/**", "/","/login","/error").permitAll();
+            request.requestMatchers("/p/**", "/", "/login", "/error").permitAll();
             request.requestMatchers("/r/**").authenticated();
             request.requestMatchers("/a/**").hasRole("ADMIN");
             request.anyRequest().denyAll();
