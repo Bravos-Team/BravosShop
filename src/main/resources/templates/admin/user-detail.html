@@ -79,7 +79,7 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Chi tiết người dùng</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="/p/admin/user" class="btn btn-secondary">
+                    <a  href="javascript:history.go(-1)" class="btn btn-secondary">
                         Quay lại
                     </a>
                 </div>
@@ -124,14 +124,19 @@
                                 </p>
                             </div>
                             <div class="mb-3">
-                                <button class="btn btn-primary">Quản lý địa chỉ</button>
+                                <button th:onclick="|window.location.href='/a/address/${user.id}'|" class="btn btn-primary">Quản lý địa chỉ</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="border-top pt-3">
+                    <div th:if="${user.isEnabled()}" class="border-top pt-3">
                         <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#lockUserModal">
                             Khóa người dùng
+                        </button>
+                    </div>
+                    <div th:if="${!user.isEnabled()}" class="border-top pt-3">
+                        <button class="btn btn-success" th:onclick="| window.location.href='/a/users/unlock/${user.id}'|" data-bs-toggle="modal" data-bs-target="#lockUserModal">
+                           Mở khóa người dùng
                         </button>
                     </div>
                 </div>
@@ -170,7 +175,22 @@
 <script src="/res/js/admin.js"></script>
 <script>
     window.onload = showDefNotification;
+    function goBack() {
+        let historyList = sessionStorage.getItem("historyList");
+        historyList = historyList ? JSON.parse(historyList) : [];
 
+        // Xóa trang hiện tại
+        historyList.pop();
+
+        if (historyList.length > 0) {
+            let previousUrl = historyList.pop(); // Lấy trang trước đó
+            sessionStorage.setItem("historyList", JSON.stringify(historyList));
+            window.location.href = previousUrl; // Điều hướng đến trang trước đó
+        } else {
+            alert("Không còn trang trước đó!");
+        }
+    }
 </script>
+
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Admin Dashboard</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -73,9 +74,9 @@
         <!-- Main content -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Quản lý địa chỉ - Nguyễn Văn A</h1>
+                <h1 class="h2">Quản lý địa chỉ - <span th:text="${users.username}"></span> </h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <a href="user-details.html" class="btn btn-secondary me-2">
+                    <a href="javascript:history.go(-1)" class="btn btn-secondary me-2">
                         Quay lại
                     </a>
                 </div>
@@ -83,40 +84,43 @@
 
             <!-- Address Cards -->
             <div class="row">
+
                 <!-- Address Card 1 -->
-                <div class="col-md-6 mb-4">
+                <div th:each="address : ${addresses}" class="col-md-6 mb-4">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <div>
-                                <span class="badge bg-primary me-2">Nhà</span>
-                                <span class="badge bg-success">Mặc định</span>
+                                <span th:if="${address.type.ordinal() == 0}"
+                                      class="badge bg-primary me-2">Nhà</span>
+
+                                <span th:if="${address.type.ordinal() ==1}"
+                                      class="badge bg-info">Văn phòng</span>
+                                <span th:if="${address.type.ordinal() ==2}"
+                                      class="badge bg-warning">Căn Hộ </span>
+                                <span th:if="${users.defaultAddress != null and address.id == users.defaultAddress.id}"
+                                      class="badge bg-success">Mặc định</span>
                             </div>
                         </div>
                         <div class="card-body">
-                            <p class="card-text mb-1"><strong>Đường:</strong> 123 Đường ABC</p>
-                            <p class="card-text mb-1"><strong>Phường/Xã:</strong> Phường XYZ</p>
-                            <p class="card-text mb-1"><strong>Quận/Huyện:</strong> Quận 1</p>
-                            <p class="card-text mb-0"><strong>Thành phố:</strong> TP.HCM</p>
+                            <p class="card-text mb-1">
+                                <strong>Đường:</strong> <span th:text="${address.street}">123 Đường ABC</span>
+                            </p>
+                            <p class="card-text mb-1">
+                                <strong>Phường/Xã:</strong> <span th:text="${address.ward}">Phường XYZ</span>
+                            </p>
+                            <p class="card-text mb-1">
+                                <strong>Quận/Huyện:</strong> <span th:text="${address.district}">Quận 1</span>
+                            </p>
+                            <p class="card-text mb-0">
+                                <strong>Thành phố:</strong> <span th:text="${address.city}">TP.HCM</span>
+                            </p>
+
                         </div>
                     </div>
                 </div>
 
                 <!-- Address Card 2 -->
-                <div class="col-md-6 mb-4">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="badge bg-info">Văn phòng</span>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text mb-1"><strong>Đường:</strong> 456 Đường DEF</p>
-                            <p class="card-text mb-1"><strong>Phường/Xã:</strong> Phường MNO</p>
-                            <p class="card-text mb-1"><strong>Quận/Huyện:</strong> Quận 2</p>
-                            <p class="card-text mb-0"><strong>Thành phố:</strong> TP.HCM</p>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </main>
     </div>
@@ -174,5 +178,23 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 <!-- Custom JS -->
 <script src="/res/js/admin.js"></script>
+<script>
+    function goBack() {
+        let historyList = sessionStorage.getItem("historyList");
+        historyList = historyList ? JSON.parse(historyList) : [];
+
+        // Xóa trang hiện tại
+        historyList.pop();
+
+        if (historyList.length > 0) {
+            let previousUrl = historyList.pop(); // Lấy trang trước đó
+            sessionStorage.setItem("historyList", JSON.stringify(historyList));
+            window.location.href = previousUrl; // Điều hướng đến trang trước đó
+        } else {
+            alert("Không còn trang trước đó!");
+        }
+    }
+</script>
 </body>
+
 </html>
