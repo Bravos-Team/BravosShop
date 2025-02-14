@@ -1,5 +1,6 @@
 package com.bravos2k5.bravosshop.service.impl;
 
+import com.bravos2k5.bravosshop.dto.user.UserAdminDto;
 import com.bravos2k5.bravosshop.model.cart.Cart;
 import com.bravos2k5.bravosshop.model.user.User;
 import com.bravos2k5.bravosshop.repo.CartRepository;
@@ -9,6 +10,8 @@ import com.bravos2k5.bravosshop.service.UserService;
 import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
 import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,12 +45,12 @@ public class UserServiceImpl implements UserService {
             cartId = cartCookie.getValue();
         }
         if(cartId == null || cartId.isBlank()) {
-            user.setCart(new Cart(identifyGenerator.generateId(), user));
+            user.setCart(new Cart(identifyGenerator.generateId(1), user));
         }
         else {
             Cart cart = cartRepository.findById(Long.valueOf(cartId)).orElse(null);
             if (cart == null || cart.getUser() != null) {
-                cart = new Cart(identifyGenerator.generateId(),user);
+                cart = new Cart(identifyGenerator.generateId(1),user);
             }
             else {
                 cart.setUser(user);
@@ -55,7 +58,7 @@ public class UserServiceImpl implements UserService {
             user.setCart(cart);
         }
         if (user.getId() == null) {
-            user.setId(identifyGenerator.generateId());
+            user.setId(identifyGenerator.generateId(1));
         }
         return userRepository.saveAndFlush(user);
     }
@@ -102,5 +105,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByEmailOrUsername(email,username);
     }
 
+    @Override
+    public Page<UserAdminDto> getAllAdminUserDto(int pageNumber, int pageSize) {
+        return userRepository.getAllUserAdminDto(PageRequest.of( (pageNumber - 1),pageSize));
+    }
 
 }
