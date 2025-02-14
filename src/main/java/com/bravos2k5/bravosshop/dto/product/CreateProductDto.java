@@ -5,10 +5,11 @@ import com.bravos2k5.bravosshop.enums.PromotionType;
 import lombok.Value;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Value
-public class CreateProductDto {
+public class CreateProductDto implements Serializable {
 
     String name;
     Integer categoryId;

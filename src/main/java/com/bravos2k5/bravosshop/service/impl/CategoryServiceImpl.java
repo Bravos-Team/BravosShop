@@ -1,5 +1,6 @@
 package com.bravos2k5.bravosshop.service.impl;
 
+import com.bravos2k5.bravosshop.cache.RedisCacheEntry;
 import com.bravos2k5.bravosshop.dto.category.CategoryAdminDto;
 import com.bravos2k5.bravosshop.dto.category.CreateCategoryDto;
 import com.bravos2k5.bravosshop.dto.category.CategoryTree;
@@ -46,40 +47,18 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryTree> getCategoryTreeWithLock() {
 
-        final String cacheKey = "categoryTree";
-        final String lockKey = "lock:categoryTree";
+        RedisCacheEntry<List<CategoryTree>> redisCacheEntry = RedisCacheEntry.<List<CategoryTree>>builder()
+                .key("categoryTree")
+                .fallBackFunction(this::getCategoryTree)
+                .keyTimeout(60)
+                .keyTimeUnit(TimeUnit.MINUTES)
+                .lockTimeout(200)
+                .lockTimeUnit(TimeUnit.MILLISECONDS)
+                .retryTime(4)
+                .retryWait(50)
+                .build();
 
-        List<CategoryTree> categoryTrees = redisService.get(cacheKey);
-        if(categoryTrees != null) {
-            return categoryTrees;
-        }
-
-        boolean isLockAcquired = redisService.saveIfAbsent(lockKey,1,1000,TimeUnit.MILLISECONDS);
-
-        if(!isLockAcquired) {
-            try {
-                for (int i = 0; i < 3; i++) {
-                    Thread.sleep(50);
-                    categoryTrees = redisService.get(cacheKey);
-                    if(categoryTrees != null) {
-                        return categoryTrees;
-                    }
-                }
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        try {
-            categoryTrees = getCategoryTree();
-            redisService.save(cacheKey,categoryTrees,60,TimeUnit.MINUTES);
-            log.info("Category tree has been cached successfully!");
-            return categoryTrees;
-        } finally {
-            if (isLockAcquired) {
-                redisService.delete(lockKey);
-            }
-        }
+        return redisService.getWithLock(redisCacheEntry);
 
     }
 

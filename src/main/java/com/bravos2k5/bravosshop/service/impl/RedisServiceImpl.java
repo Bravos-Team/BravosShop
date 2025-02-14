@@ -1,15 +1,19 @@
 package com.bravos2k5.bravosshop.service.impl;
 
+import com.bravos2k5.bravosshop.cache.RedisCacheEntry;
 import com.bravos2k5.bravosshop.service.RedisService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 public class RedisServiceImpl implements RedisService {
 
@@ -91,6 +95,40 @@ public class RedisServiceImpl implements RedisService {
         RedisConnectionFactory redisConnectionFactory = redisTemplate.getConnectionFactory();
         if (redisConnectionFactory != null && !redisConnectionFactory.getConnection().isClosed()) {
             redisTemplate.getConnectionFactory().getConnection().serverCommands().flushAll();
+        }
+    }
+
+    @Override
+    public <T> T getWithLock(RedisCacheEntry<T> cacheEntry) {
+        final String key = cacheEntry.getKey();
+        final String lockKey = "lock:" + key;
+        T value = this.get(key);
+        if(value != null) return value;
+
+        boolean isLockAcquired = this.saveIfAbsent(lockKey,1, cacheEntry.getLockTimeout(), cacheEntry.getLockTimeUnit());
+
+        if(!isLockAcquired) {
+            try {
+                for(int i = 0; i < cacheEntry.getRetryTime(); i++) {
+                    Thread.sleep(Duration.ofMillis(cacheEntry.getRetryWait()));
+                    value = this.get(key);
+                    if(value != null) {
+                        return value;
+                    }
+                }
+            } catch (InterruptedException e) {
+                log.error("Error when waiting get cache");
+            }
+        }
+
+        try {
+            value = cacheEntry.getFallBackFunction().get();
+            this.save(key,value,cacheEntry.getKeyTimeout(),cacheEntry.getKeyTimeUnit());
+            return value;
+        } finally {
+            if (isLockAcquired) {
+                this.delete(lockKey);
+            }
         }
     }
 

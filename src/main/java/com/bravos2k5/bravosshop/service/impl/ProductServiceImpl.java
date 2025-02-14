@@ -1,5 +1,6 @@
 package com.bravos2k5.bravosshop.service.impl;
 
+import com.bravos2k5.bravosshop.cache.RedisCacheEntry;
 import com.bravos2k5.bravosshop.dto.product.CreateProductDto;
 import com.bravos2k5.bravosshop.dto.product.ProductDisplayDto;
 import com.bravos2k5.bravosshop.model.category.Category;
@@ -8,6 +9,7 @@ import com.bravos2k5.bravosshop.repo.ProductRepository;
 import com.bravos2k5.bravosshop.service.BlobService;
 import com.bravos2k5.bravosshop.service.CategoryService;
 import com.bravos2k5.bravosshop.service.ProductService;
+import com.bravos2k5.bravosshop.service.RedisService;
 import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -26,14 +29,16 @@ public class ProductServiceImpl implements ProductService {
     private final BlobService blobService;
     private final ObjectMapper objectMapper;
     private final ProductRepository productRepository;
+    private final RedisService redisService;
 
     public ProductServiceImpl(IdentifyGenerator identifyGenerator, CategoryService categoryService, BlobService blobService,
-                              ObjectMapper objectMapper, ProductRepository productRepository) {
+                              ObjectMapper objectMapper, ProductRepository productRepository, RedisService redisService) {
         this.identifyGenerator = identifyGenerator;
         this.categoryService = categoryService;
         this.blobService = blobService;
         this.objectMapper = objectMapper;
         this.productRepository = productRepository;
+        this.redisService = redisService;
     }
 
     @Override
@@ -43,22 +48,62 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDisplayDto> getProductsDisplay() {
-        return productRepository.getAllDisplayProduct();
+        RedisCacheEntry<List<ProductDisplayDto>> redisCacheEntry = RedisCacheEntry.<List<ProductDisplayDto>>builder()
+                .key("products")
+                .fallBackFunction(productRepository::getAllDisplayProduct)
+                .keyTimeout(10)
+                .keyTimeUnit(TimeUnit.MINUTES)
+                .lockTimeout(200)
+                .lockTimeUnit(TimeUnit.MILLISECONDS)
+                .retryTime(4)
+                .retryWait(50)
+                .build();
+        return redisService.getWithLock(redisCacheEntry);
     }
 
     @Override
     public List<ProductDisplayDto> getDiscountProducts() {
-        return productRepository.getAllDisplayPromotionProduct();
+        RedisCacheEntry<List<ProductDisplayDto>> redisCacheEntry = RedisCacheEntry.<List<ProductDisplayDto>>builder()
+                .key("discountProducts")
+                .fallBackFunction(productRepository::getAllDisplayPromotionProduct)
+                .keyTimeout(10)
+                .keyTimeUnit(TimeUnit.MINUTES)
+                .lockTimeout(200)
+                .lockTimeUnit(TimeUnit.MILLISECONDS)
+                .retryTime(4)
+                .retryWait(50)
+                .build();
+        return redisService.getWithLock(redisCacheEntry);
     }
 
     @Override
     public List<ProductDisplayDto> getTopSellerProducts() {
-        return productRepository.getTopSellerProducts();
+        RedisCacheEntry<List<ProductDisplayDto>> redisCacheEntry = RedisCacheEntry.<List<ProductDisplayDto>>builder()
+                .key("topSellerProducts")
+                .fallBackFunction(productRepository::getTopSellerProducts)
+                .keyTimeout(60)
+                .keyTimeUnit(TimeUnit.MINUTES)
+                .lockTimeout(200)
+                .lockTimeUnit(TimeUnit.MILLISECONDS)
+                .retryTime(4)
+                .retryWait(50)
+                .build();
+        return redisService.getWithLock(redisCacheEntry);
     }
 
     @Override
     public List<ProductDisplayDto> getNewestProducts() {
-        return productRepository.getNewestProducts();
+        RedisCacheEntry<List<ProductDisplayDto>> redisCacheEntry = RedisCacheEntry.<List<ProductDisplayDto>>builder()
+                .key("newestProducts")
+                .fallBackFunction(productRepository::getNewestProducts)
+                .keyTimeout(5)
+                .keyTimeUnit(TimeUnit.MINUTES)
+                .lockTimeout(200)
+                .lockTimeUnit(TimeUnit.MILLISECONDS)
+                .retryTime(4)
+                .retryWait(50)
+                .build();
+        return redisService.getWithLock(redisCacheEntry);
     }
 
     @Override

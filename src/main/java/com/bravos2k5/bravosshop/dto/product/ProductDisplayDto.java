@@ -3,8 +3,10 @@ package com.bravos2k5.bravosshop.dto.product;
 import com.bravos2k5.bravosshop.enums.PromotionType;
 import lombok.Value;
 
+import java.io.Serializable;
+
 @Value
-public class ProductDisplayDto {
+public class ProductDisplayDto implements Serializable {
 
     Long id;
     String name;
