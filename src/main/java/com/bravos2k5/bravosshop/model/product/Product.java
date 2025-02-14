@@ -1,11 +1,13 @@
 package com.bravos2k5.bravosshop.model.product;
 
 import com.bravos2k5.bravosshop.enums.ProductStatus;
+import com.bravos2k5.bravosshop.enums.PromotionType;
 import com.bravos2k5.bravosshop.model.SnowFlakeId;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.bravos2k5.bravosshop.model.category.Category;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -37,12 +39,27 @@ public class Product implements SnowFlakeId {
     @Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String images = "{}";
 
-    @Column(nullable = false)
-    private Integer category;
+    @JoinColumn(nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Category category;
 
     @Column(nullable = false)
     @Builder.Default
+    @Enumerated(EnumType.ORDINAL)
     private ProductStatus status = ProductStatus.IN_STOCK;
+
+    @Column(nullable = false)
+    @Builder.Default
+    @Enumerated(EnumType.ORDINAL)
+    private PromotionType promotionType = PromotionType.NO_PROMOTION;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private Double discountValue = 0d;
+
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
 
     public Double setUnitPrice(Double unitPrice) {
         if (unitPrice < 0) {

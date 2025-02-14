@@ -53,4 +53,9 @@ public class AdminController {
         return "admin/general-statistic";
     }
 
+    @GetMapping("/add-product")
+    public String addProduct() {
+        return "admin/add-product";
+    }
+
 }

@@ -1,0 +1,40 @@
+package com.bravos2k5.bravosshop.controller.admin;
+
+import com.bravos2k5.bravosshop.dto.product.CreateProductDto;
+import com.bravos2k5.bravosshop.service.ProductService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+@Controller
+@RequestMapping("/a/product")
+public class ProductAdminController {
+
+    private final ProductService productService;
+
+    public ProductAdminController(ProductService productService) {
+        this.productService = productService;
+    }
+
+    @GetMapping("/add")
+    public String addProduct() {
+        return "admin/add-product";
+    }
+
+    @PostMapping("/add")
+    public String addProductPost(@ModelAttribute CreateProductDto createProductDto, RedirectAttributes redirectAttributes) {
+        String message = "Success";
+        try {
+            productService.createProduct(createProductDto);
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
+        redirectAttributes.addFlashAttribute("message",message);
+        return "admin/add-product";
+    }
+
+}

@@ -73,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             categoryTrees = getCategoryTree();
             redisService.save(cacheKey,categoryTrees,60,TimeUnit.MINUTES);
-            log.info("Category tree is saved");
+            log.info("Category tree has been cached successfully!");
             return categoryTrees;
         } finally {
             if (isLockAcquired) {
@@ -83,7 +83,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
-    private List<CategoryTree> getCategoryTree() {
+    @Override
+    public List<CategoryTree> getCategoryTree() {
         List<CategoryClosure> categoryList = categoryClosureRepository.findParentRelationship();
         List<CategoryTree> roots = new ArrayList<>();
         Map<Integer,CategoryTree> categoryTreeMap = new HashMap<>();
@@ -196,4 +197,10 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryAdminDto> getAllCategoryDto() {
         return categoryRepository.getAllCategoryDto();
     }
+
+    @Override
+    public Category findById(Integer categoryId) {
+        return categoryRepository.findById(categoryId).orElse(null);
+    }
+
 }

@@ -15,41 +15,83 @@
         <div class="product-section">
             <h2>Khuyến Mãi Đặc Biệt</h2>
             <div class="product-grid">
-                <div class="product-card">
-                    <div class="product-badge">Giảm 20%</div>
+                <div th:each="product : ${discountProducts}" class="product-card">
+                    <div th:text="${product.promotionText}" class="product-badge"></div>
                     <div class="product-image-container">
-                        <img src="https://placehold.co/250" alt="Sản phẩm 1" class="product-image">
+                        <img th:src="${product.thumbnail}" th:alt="${product.name}" class="product-image">
                         <div class="image-overlay">
-                            <button class="image-detail-btn">Xem Chi Tiết</button>
+                            <a th:href="@{'/p/product/' + ${product.id}}">
+                                <button class="image-detail-btn">Xem Chi Tiết</button>
+                            </a>
                         </div>
                     </div>
                     <div class="product-details">
-                        <span class="product-name">iPhone 13 Pro</span>
-                        <span class="product-category">Điện Thoại</span>
+                        <span th:text="${product.name}" class="product-name"></span>
+                        <span th:text="${product.categoryName}" class="product-category"></span>
                         <div class="product-actions">
-                            <span class="product-price">22.990.000đ</span>
-                            <button class="add-to-cart-btn">Thêm Giỏ Hàng</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-badge">Giảm 20%</div>
-                    <div class="product-image-container">
-                        <img src="https://placehold.co/250" alt="Sản phẩm 1" class="product-image">
-                        <div class="image-overlay">
-                            <button class="image-detail-btn">Xem Chi Tiết</button>
-                        </div>
-                    </div>
-                    <div class="product-details">
-                        <span class="product-name">iPhone 13 Pro</span>
-                        <span class="product-category">Điện Thoại</span>
-                        <div class="product-actions">
-                            <span class="product-price">22.990.000đ</span>
+                            <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}" class="product-price"></span>
+                            <del style="font-size: 18px; color: white"
+                                 th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></del>
                             <button class="add-to-cart-btn">Thêm Giỏ Hàng</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <br>
+
+            <h2>Bán chạy nhất</h2>
+            <div class="product-grid">
+                <div th:each="product : ${topsellerProducts}" class="product-card">
+                    <div th:text="${product.promotionText}" class="product-badge"></div>
+                    <div class="product-image-container">
+                        <img th:src="${product.thumbnail}" th:alt="${product.name}" class="product-image">
+                        <div class="image-overlay">
+                            <a th:href="@{'/p/product/' + ${product.id}}">
+                                <button class="image-detail-btn">Xem Chi Tiết</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-details">
+                        <span th:text="${product.name}" class="product-name"></span>
+                        <span th:text="${product.categoryName}" class="product-category"></span>
+                        <div class="product-actions">
+                            <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}" class="product-price"></span>
+                            <del style="font-size: 18px; color: white"
+                                 th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></del>
+                            <button class="add-to-cart-btn">Thêm Giỏ Hàng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <h2>Mới nhất</h2>
+            <div class="product-grid">
+                <div th:each="product : ${newestProducts}" class="product-card">
+                    <div th:text="${product.promotionText}" class="product-badge"></div>
+                    <div class="product-image-container">
+                        <img th:src="${product.thumbnail}" th:alt="${product.name}" class="product-image">
+                        <div class="image-overlay">
+                            <a th:href="@{'/p/product/' + ${product.id}}">
+                                <button class="image-detail-btn">Xem Chi Tiết</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-details">
+                        <span th:text="${product.name}" class="product-name"></span>
+                        <span th:text="${product.categoryName}" class="product-category"></span>
+                        <div class="product-actions">
+                            <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}" class="product-price"></span>
+                            <del style="font-size: 18px; color: white"
+                                 th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></del>
+                            <button class="add-to-cart-btn">Thêm Giỏ Hàng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 

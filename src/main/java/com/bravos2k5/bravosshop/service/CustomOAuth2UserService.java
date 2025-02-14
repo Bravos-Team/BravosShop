@@ -49,7 +49,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
         User user = userService.findByEmail(email);
         if (user == null) {
-            long newId = identifyGenerator.generateId(1);
+            long newId = identifyGenerator.generateId();
             user = User
                     .builder()
                     .id(newId)

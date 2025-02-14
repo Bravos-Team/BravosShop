@@ -1,4 +1,4 @@
-package com.bravos2k5.bravosshop.model.invoice;
+package com.bravos2k5.bravosshop.model.order;
 
 import com.bravos2k5.bravosshop.enums.OrderStatus;
 import com.bravos2k5.bravosshop.enums.PaymentStatus;
@@ -17,7 +17,8 @@ import java.util.Collection;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Invoice implements SnowFlakeId {
+@Table(name = "orders")
+public class Order implements SnowFlakeId {
 
     @Id
     private Long id;
@@ -37,11 +38,11 @@ public class Invoice implements SnowFlakeId {
     @Column(nullable = false)
     private OrderStatus orderStatus = OrderStatus.PENDING;
 
-    @OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY)
-    private Collection<InvoiceDetail> invoiceDetails;
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    private Collection<OrderDetail> orderDetails;
 
     public Double total() {
-        return invoiceDetails.stream().mapToDouble(InvoiceDetail::getFinalPrice).sum();
+        return orderDetails.stream().mapToDouble(OrderDetail::getFinalPrice).sum();
     }
 
 }

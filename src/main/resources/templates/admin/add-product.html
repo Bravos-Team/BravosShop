@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/admin/admin-template}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo mới sản phẩm</title>
+</head>
+<body>
+<main layout:fragment="content" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Tạo mới sản phẩm</h1>
+    </div>
+
+    <!-- Product Details Form -->
+    <div class="card">
+        <div class="card-body">
+            <form action="/a/product/add" method="POST" enctype="multipart/form-data">
+                <!-- Basic Information -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Tên sản phẩm</label>
+                            <input required name="name" type="text" class="form-control" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Danh mục</label>
+                            <select name="categoryId" class="form-select">
+                                <option th:each="category : ${@categoryServiceImpl.getAllCategoryDto()}"
+                                        th:value="${category.id}" th:text="${category.name}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Đơn vị</label>
+                            <input required name="unit" type="text" class="form-control" value="Chiếc">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả</label>
+                            <textarea required name="description" type="text" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Đơn giá</label>
+                            <input required placeholder="VNĐ" name="unitPrice" type="number" class="form-control" value="0">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Trạng thái</label>
+                            <select name="status" class="form-select">
+                                <option th:each="status : ${T(com.bravos2k5.bravosshop.enums.ProductStatus).values()}" th:value="${status}" th:text="${status.name().replaceAll('_',' ')}" ></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Promotion Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Khuyến mãi</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input th:value="${T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
+                                       class="form-check-input" type="radio" name="promotionType" id="noPromotion" checked>
+                                <label class="form-check-label" for="noPromotion">
+                                    Không áp dụng khuyến mãi
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input th:value="${T(com.bravos2k5.bravosshop.enums.PromotionType).PERCENTAGE}"
+                                       class="form-check-input" type="radio" name="promotionType" id="percentageDiscount">
+                                <label class="form-check-label" for="percentageDiscount">
+                                    Giảm theo phần trăm
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input th:value="${T(com.bravos2k5.bravosshop.enums.PromotionType).FIXED}"
+                                       class="form-check-input" type="radio" name="promotionType" id="fixedDiscount">
+                                <label class="form-check-label" for="fixedDiscount">
+                                    Giảm giá cố định
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Giá trị giảm</label>
+                                    <input name="discountValue" min="0" type="number" class="form-control" placeholder="Nhập giá trị giảm">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Thời gian bắt đầu</label>
+                                    <input name="startTime" type="datetime-local" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Thời gian kết thúc</label>
+                                    <input name="endTime" type="datetime-local" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Images Section -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Hình ảnh sản phẩm</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label">Ảnh thumbnail</label>
+                            <input name="thumbnail" type="file" class="form-control mb-2" accept="image/*" id="thumbnailInput">
+                            <div class="image-container">
+                                <img  class="thumbnail-preview" id="thumbnailPreview">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ảnh bổ sung</label>
+                            <input name="images" type="file" class="form-control mb-2" accept="image/*" multiple id="additionalImagesInput">
+                            <div class="d-flex flex-wrap" id="additionalImages">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <button type="button" class="btn btn-secondary me-2" onclick="history.back()">
+                            <i class="bi bi-arrow-left"></i> Trở về
+                        </button>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Lưu thông tin
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="/res/js/admin.js"></script>
+    <script>
+
+        document.getElementById('thumbnailInput').addEventListener('change', function(event) {
+            const file = event.target.files[0]; // Chỉ lấy file đầu tiên (do không phải multiple)
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('thumbnailPreview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('thumbnailPreview').src = 'https://placehold.co/300'; // Reset nếu không có file
+            }
+        });
+
+        function deleteImage(button) {
+            const imageContainer = button.parentElement;
+            imageContainer.remove();
+        }
+
+        document.getElementById('additionalImagesInput').addEventListener('change', function(event) {
+            const files = event.target.files;
+            const additionalImagesContainer = document.getElementById('additionalImages');
+            additionalImagesContainer.innerHTML = ''; // Reset trước khi thêm ảnh mới
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'image-container';
+                    imageContainer.dataset.index = i; // Gán index để xác định ảnh nào bị xóa
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'preview-image';
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'delete-image-btn';
+                    deleteButton.innerHTML = '<i class="bi bi-x"></i>';
+                    deleteButton.onclick = function() {
+                        removeFile(i); // Xóa ảnh khi click
+                    };
+
+                    imageContainer.appendChild(img);
+                    imageContainer.appendChild(deleteButton);
+                    additionalImagesContainer.appendChild(imageContainer);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function removeFile(index) {
+            const fileInput = document.getElementById("additionalImagesInput");
+            const dt = new DataTransfer();
+
+            const files = fileInput.files;
+            for (let i = 0; i < files.length; i++) {
+                if (i !== index) {
+                    dt.items.add(files[i]); // Chỉ giữ lại các file không bị xóa
+                }
+            }
+
+            fileInput.files = dt.files; // Cập nhật input với danh sách file mới
+
+            // Cập nhật lại danh sách hiển thị
+            document.getElementById('additionalImages').innerHTML = '';
+            for (let i = 0; i < dt.files.length; i++) {
+                const file = dt.files[i];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'image-container';
+                    imageContainer.dataset.index = i;
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'preview-image';
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'delete-image-btn';
+                    deleteButton.innerHTML = '<i class="bi bi-x"></i>';
+                    deleteButton.onclick = function() {
+                        removeFile(i);
+                    };
+
+                    imageContainer.appendChild(img);
+                    imageContainer.appendChild(deleteButton);
+                    document.getElementById('additionalImages').appendChild(imageContainer);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+    </script>
+
+</main>
+</body>
+</html>
