@@ -43,30 +43,32 @@
 
                     </div>
                     <div class="product-price">
-                        <span th:if="${product.promotionType == T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
+                        <span th:if="${!product.onPromtion()}"
                               th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}"
                               class="discounted-price"></span>
-                        <span th:if="${product.promotionType != T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
-                              th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}"
-                              class="original-price"></span>
-                        <span th:if="${product.promotionType != T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
-                              th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}"
-                              class="discounted-price"></span>
-                        <span th:if="${product.promotionType != T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
-                              th:text="${product.promotionText}" class="discount-badge"></span>
+                        <th:block th:if="${product.onPromtion()}">
+                            <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}"
+                                  class="original-price"></span>
+                            <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}"
+                                  class="discounted-price"></span>
+                            <span th:text="${product.promotionText}" class="discount-badge"></span>
+                        </th:block>
                     </div>
 
                     <div class="quantity-control">
                         <label for="quantity">Số lượng:</label>
                         <div class="quantity-input">
-                            <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
-                            <input type="number" id="quantity" value="1" min="1">
-                            <button class="quantity-btn" onclick="increaseQuantity()">+</button>
+                            <button type="button" class="quantity-btn" onclick="decreaseQuantity()">-</button>
+                            <form id="addCartForm" action="/p/cart/add" method="post">
+                                <input hidden="hidden" name="productId" th:value="${product.id}">
+                                <input type="number" id="quantity" value="1" min="1" max="999">
+                            </form>
+                            <button type="button" class="quantity-btn" onclick="increaseQuantity()">+</button>
                         </div>
                     </div>
 
                     <div class="product-actions">
-                        <button class="add-to-cart-btn">Thêm vào giỏ hàng</button>
+                        <button onclick="addToCart()" class="add-to-cart-btn">Thêm vào giỏ hàng</button>
                         <button class="buy-now-btn">Mua ngay</button>
                     </div>
 
@@ -183,6 +185,11 @@
                     star.textContent = 'star_border';
                 }
             });
+        }
+
+        function addToCart() {
+            let form = document.getElementById('addCartForm');
+            form.submit();
         }
 
     </script>

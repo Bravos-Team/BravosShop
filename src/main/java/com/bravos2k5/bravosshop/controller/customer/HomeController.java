@@ -1,4 +1,4 @@
-package com.bravos2k5.bravosshop.controller;
+package com.bravos2k5.bravosshop.controller.customer;
 
 import com.bravos2k5.bravosshop.service.ProductService;
 import org.springframework.stereotype.Controller;

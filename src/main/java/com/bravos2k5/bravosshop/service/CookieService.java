@@ -10,4 +10,6 @@ public interface CookieService {
 
     void deleteCookie(String name);
 
+    String getValue(String name);
+
 }

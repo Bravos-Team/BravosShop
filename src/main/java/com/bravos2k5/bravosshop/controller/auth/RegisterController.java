@@ -1,4 +1,4 @@
-package com.bravos2k5.bravosshop.controller;
+package com.bravos2k5.bravosshop.controller.auth;
 
 import com.bravos2k5.bravosshop.dto.register.RegisterDto;
 import com.bravos2k5.bravosshop.service.AuthService;

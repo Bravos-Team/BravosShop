@@ -1,4 +1,4 @@
-package com.bravos2k5.bravosshop.controller;
+package com.bravos2k5.bravosshop.controller.customer;
 
 import com.bravos2k5.bravosshop.dto.user.UserProfileDto;
 import com.bravos2k5.bravosshop.model.user.User;
