@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("a/users")
+@RequestMapping("/a/users")
 public class UserAdminController {
 
 
@@ -27,11 +27,11 @@ public class UserAdminController {
     }
 
     @GetMapping
-    public String user(@RequestParam(defaultValue = "1") int page,
-                       Model model) {
+    public String user(@RequestParam(defaultValue = "1") int page, Model model ) {
         Page<UserAdminDto> userAdminDtoPage = userServiceImpl.getAllAdminUserDto(page, PAGE_SIZE);
         model.addAttribute("users", userAdminDtoPage);
         model.addAttribute("currentPage", page);
+
         return "admin/user";
     }
 
@@ -39,6 +39,7 @@ public class UserAdminController {
     public String detail(@PathVariable("id") Long id, Model model) {
         User user = userServiceImpl.findById(id);
         model.addAttribute("user", user);
+
         return "admin/user-detail";
     }
 
@@ -48,6 +49,15 @@ public class UserAdminController {
         user.setEnabled(false);
         userServiceImpl.updateUserIfExist(user);
         redirectAttributes.addFlashAttribute("message", "Khóa tải khoản thành công");
+        return "redirect:/a/users/detail/" + id;
+    }
+
+    @GetMapping("/unlock/{id}")
+    public String unLockUser(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+        User user = userServiceImpl.findById(id);
+        user.setEnabled(true);
+        userServiceImpl.updateUserIfExist(user);
+        redirectAttributes.addFlashAttribute("message", "Mở khóa tải khoản thành công");
         return "redirect:/a/users/detail/" + id;
     }
 }
