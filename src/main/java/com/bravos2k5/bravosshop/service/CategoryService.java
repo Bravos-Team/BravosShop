@@ -14,6 +14,8 @@ public interface CategoryService {
 
     List<CategoryTree> getCategoryTreeWithLock();
 
+    List<CategoryTree> getCategoryTree();
+
     void update(UpdateCategoryDto category);
 
     void create(CreateCategoryDto category);
@@ -21,5 +23,7 @@ public interface CategoryService {
     void delete(Integer id);
 
     List<CategoryAdminDto> getAllCategoryDto();
+
+    Category findById(Integer categoryId);
 
 }

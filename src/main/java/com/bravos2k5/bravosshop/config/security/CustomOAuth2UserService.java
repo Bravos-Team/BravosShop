@@ -1,8 +1,8 @@
-package com.bravos2k5.bravosshop.service;
+package com.bravos2k5.bravosshop.config.security;
 
 import com.bravos2k5.bravosshop.model.user.User;
+import com.bravos2k5.bravosshop.service.UserService;
 import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -13,7 +13,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -26,15 +25,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final IdentifyGenerator identifyGenerator;
     private final UserService userService;
-    private final HttpServletRequest httpServletRequest;
 
     @Autowired
     public CustomOAuth2UserService(UserService userService, BCryptPasswordEncoder passwordEncoder,
-                                   IdentifyGenerator identifyGenerator, HttpServletRequest httpServletRequest) {
+                                   IdentifyGenerator identifyGenerator) {
         this.passwordEncoder = passwordEncoder;
         this.identifyGenerator = identifyGenerator;
         this.userService = userService;
-        this.httpServletRequest = httpServletRequest;
     }
 
     @Override
@@ -49,7 +46,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
         User user = userService.findByEmail(email);
         if (user == null) {
-            long newId = identifyGenerator.generateId(1);
+            long newId = identifyGenerator.generateId();
             user = User
                     .builder()
                     .id(newId)

@@ -98,21 +98,22 @@
                         <a class="category-link" th:text="${categoryTree.name}" th:href="@{'p/product/category/' + ${categoryTree.slug}}"></a>
                         <span th:if="${!categoryTree.getChildren().isEmpty()}" class="material-icons">arrow_drop_down</span>
                     </div>
-                    <ul th:with="children=${categoryTree.children}" th:fragment="recursive" class="subcategory">
-                        <li th:each="child : ${children}">
-                            <div class="menu-item" onclick="toggleSubmenu(this)">
-                                <a th:text="${child.name}" th:href="@{'p/product/category/' + ${child.slug}}" class="category-link"></a>
-                                <span th:if="${!child.getChildren().isEmpty()}" class="material-icons">arrow_drop_down</span>
-                            </div>
-                            <ul th:include="~{toolbox :: recursive}" th:with="children=${child.getChildren()}" class="subcategory"></ul>
-                        </li>
-                    </ul>
+                    <ul th:replace="~{::recursive(${categoryTree.children})}" class="subcategory"></ul>
                 </li>
             </ul>
         </nav>
     </aside>
-
 </th:block>
+
+<ul th:fragment="recursive(children)" class="subcategory">
+    <li th:each="child : ${children}">
+        <div class="menu-item" onclick="toggleSubmenu(this)">
+            <a th:text="${child.name}" th:href="@{'p/product/category/' + ${child.slug}}" class="category-link"></a>
+            <span th:if="${!child.getChildren().isEmpty()}" class="material-icons">arrow_drop_down</span>
+        </div>
+        <ul th:replace="~{::recursive(${child.getChildren()})}" class="subcategory"></ul>
+    </li>
+</ul>
 
 </html>
 

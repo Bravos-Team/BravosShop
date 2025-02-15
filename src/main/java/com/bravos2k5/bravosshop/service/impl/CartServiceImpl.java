@@ -47,7 +47,7 @@ public class CartServiceImpl implements CartService {
 
         guestCart.getCartItems().forEach(cartItem -> {
             CartItem newCartItem = new CartItem();
-            newCartItem.setId(identifyGenerator.generateId(1));
+            newCartItem.setId(identifyGenerator.generateId());
             newCartItem.setCart(cart);
             newCartItem.setProduct(cartItem.getProduct());
             newCartItem.setQuantity(cartItem.getQuantity());

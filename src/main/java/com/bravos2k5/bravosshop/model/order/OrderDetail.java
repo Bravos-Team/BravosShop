@@ -1,4 +1,4 @@
-package com.bravos2k5.bravosshop.model.invoice;
+package com.bravos2k5.bravosshop.model.order;
 
 import com.bravos2k5.bravosshop.model.product.Product;
 import jakarta.persistence.*;
@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InvoiceDetail implements Serializable {
+public class OrderDetail implements Serializable {
 
     @Id
     private Long id;
@@ -23,7 +23,7 @@ public class InvoiceDetail implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
-    private Invoice invoice;
+    private Order order;
 
     @Column(nullable = false)
     private Double price;

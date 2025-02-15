@@ -1,6 +1,6 @@
 package com.bravos2k5.bravosshop.config;
 
-import com.bravos2k5.bravosshop.service.CustomUserDetailsService;
+import com.bravos2k5.bravosshop.config.security.CustomUserDetailsService;
 import com.bravos2k5.bravosshop.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,12 +21,12 @@ public class UsernamePasswordConfig {
     }
 
     @Bean
-    public CustomUserDetailsService userDetailsService(UserService userService) {
+    public UserDetailsService userDetailsService(UserService userService) {
         return new CustomUserDetailsService(userService);
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) throws Exception {
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder());

@@ -3,8 +3,7 @@ package com.bravos2k5.bravosshop.controller.admin;
 
 import com.bravos2k5.bravosshop.dto.user.UserAdminDto;
 import com.bravos2k5.bravosshop.model.user.User;
-import com.bravos2k5.bravosshop.service.impl.UserService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.bravos2k5.bravosshop.service.impl.UserServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,21 +14,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("a/users")
+@RequestMapping("/a/users")
 public class UserAdminController {
 
 
     private final static int PAGE_SIZE = 1;
 
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
 
-    public UserAdminController(UserService userServiceImpl) {
-        this.userService = userServiceImpl;
+    public UserAdminController(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @GetMapping
     public String user(@RequestParam(defaultValue = "1") int page, Model model ) {
-        Page<UserAdminDto> userAdminDtoPage = userService.getAllAdminUserDto(page, PAGE_SIZE);
+        Page<UserAdminDto> userAdminDtoPage = userServiceImpl.getAllAdminUserDto(page, PAGE_SIZE);
         model.addAttribute("users", userAdminDtoPage);
         model.addAttribute("currentPage", page);
 
@@ -38,7 +37,7 @@ public class UserAdminController {
 
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable("id") Long id, Model model) {
-        User user = userService.findById(id);
+        User user = userServiceImpl.findById(id);
         model.addAttribute("user", user);
 
         return "admin/user-detail";
@@ -46,18 +45,18 @@ public class UserAdminController {
 
     @GetMapping("/lock/{id}")
     public String lockUser(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-        User user = userService.findById(id);
+        User user = userServiceImpl.findById(id);
         user.setEnabled(false);
-        userService.updateUserIfExist(user);
+        userServiceImpl.updateUserIfExist(user);
         redirectAttributes.addFlashAttribute("message", "Khóa tải khoản thành công");
         return "redirect:/a/users/detail/" + id;
     }
 
     @GetMapping("/unlock/{id}")
     public String unLockUser(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-        User user = userService.findById(id);
+        User user = userServiceImpl.findById(id);
         user.setEnabled(true);
-        userService.updateUserIfExist(user);
+        userServiceImpl.updateUserIfExist(user);
         redirectAttributes.addFlashAttribute("message", "Mở khóa tải khoản thành công");
         return "redirect:/a/users/detail/" + id;
     }

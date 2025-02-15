@@ -1,11 +1,8 @@
 package com.bravos2k5.bravosshop.utils;
 
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-@Component
 public class IdentifyGenerator {
 
     private static final long machineIdBits = 10;
@@ -18,8 +15,16 @@ public class IdentifyGenerator {
 
     private static final long sequenceMask = (1L << sequenceBits) - 1;
 
+    private final long machineId;
     private long sequence = 0L;
     private long lastTimestamp = -1L;
+
+    public IdentifyGenerator(long machineId) {
+        if(machineId < 0 || ((machineId > (1L << machineIdBits) - 1))) {
+            throw new IllegalArgumentException("Machine ID must be between 0 and " + ((1L << machineIdBits) - 1));
+        }
+        this.machineId = machineId;
+    }
 
     private long waitForNextMillis() {
         long currentTimeMillis = System.currentTimeMillis();
@@ -29,7 +34,7 @@ public class IdentifyGenerator {
         return currentTimeMillis;
     }
 
-    public synchronized long generateId(long machineId) {
+    public synchronized long generateId() {
         if(machineId < 0 || ((machineId > (1L << machineIdBits) - 1))) {
             throw new IllegalArgumentException("Machine ID must be between 0 and " + ((1L << machineIdBits) - 1));
         }

@@ -1,5 +1,7 @@
 package com.bravos2k5.bravosshop.service;
 
+import com.bravos2k5.bravosshop.cache.RedisCacheEntry;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,5 +35,7 @@ public interface RedisService {
     void delete(String key);
 
     void clearAll();
+
+    <T> T getWithLock(RedisCacheEntry<T> cacheEntry);
 
 }
