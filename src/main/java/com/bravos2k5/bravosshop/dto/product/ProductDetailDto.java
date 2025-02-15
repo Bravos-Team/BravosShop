@@ -7,8 +7,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Value;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Value
@@ -28,23 +28,37 @@ public class ProductDetailDto {
     Double discountValue;
     PromotionType promotionType;
 
+    LocalDateTime startTime;
+    LocalDateTime endTime;
+
+    public boolean onPromtion() {
+        LocalDateTime now = LocalDateTime.now();
+        return promotionType != PromotionType.NO_PROMOTION &&
+                startTime != null && endTime != null &&
+                startTime.isBefore(now) && endTime.isAfter(now);
+    }
+
     public String getPromotionText() {
-        if(promotionType == PromotionType.PERCENTAGE) {
-            return "Giảm " + Math.round(discountValue) + " %";
-        }
-        else if(promotionType == PromotionType.FIXED) {
-            String money = currencyFormatter.formatToVietnameseCurrency(discountValue);
-            return "Giảm " + money;
+        if (onPromtion()) {
+            if(promotionType == PromotionType.PERCENTAGE) {
+                return "Giảm " + Math.round(discountValue) + " %";
+            }
+            else if(promotionType == PromotionType.FIXED) {
+                String money = currencyFormatter.formatToVietnameseCurrency(discountValue);
+                return "Giảm " + money;
+            }
         }
         return "";
     }
 
     public Double getCurrentPrice() {
-        if(promotionType == PromotionType.PERCENTAGE) {
-            return unitPrice * (1 - discountValue / 100);
-        }
-        else if(promotionType == PromotionType.FIXED) {
-            return unitPrice - discountValue;
+        if (onPromtion()) {
+            if(promotionType == PromotionType.PERCENTAGE) {
+                return unitPrice * (1 - discountValue / 100);
+            }
+            else if(promotionType == PromotionType.FIXED) {
+                return unitPrice - discountValue;
+            }
         }
         return unitPrice;
     }

@@ -3,6 +3,7 @@ package com.bravos2k5.bravosshop.config.security;
 import com.bravos2k5.bravosshop.model.user.User;
 import com.bravos2k5.bravosshop.service.UserService;
 import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
+import com.bravos2k5.bravosshop.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -50,7 +51,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user = User
                     .builder()
                     .id(newId)
-                    .username(email.substring(0,email.indexOf("@")) + "-" + suffixGenerate(googleId))
+                    .username(email.substring(0,email.indexOf("@")) + "-" + RandomUtils.randomString(5))
                     .displayName(name)
                     .password(passwordEncoder.encode(UUID.randomUUID().toString()))
                     .email(email)
@@ -63,14 +64,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user.setGoogleId(googleId);
             user = userService.updateUser(user);
         }
+
         Map<String,Object> attributes = new HashMap<>(oAuth2User.getAttributes());
         attributes.put("username",user.getUsername());
         attributes.put("displayName",user.getDisplayName());
         return new DefaultOAuth2User(user.getAuthorities(),attributes,"sub");
-    }
-
-    private String suffixGenerate(String googleId) {
-        return (Integer.parseInt(googleId.substring(0,5)) + System.currentTimeMillis() % 10) + "";
     }
 
 }

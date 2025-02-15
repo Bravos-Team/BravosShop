@@ -1,14 +1,25 @@
 package com.bravos2k5.bravosshop.service.impl;
 
+import com.bravos2k5.bravosshop.config.security.TokenInfo;
+import com.bravos2k5.bravosshop.dto.cart.CartItemDto;
 import com.bravos2k5.bravosshop.model.cart.Cart;
 import com.bravos2k5.bravosshop.model.cart.CartItem;
+import com.bravos2k5.bravosshop.model.product.Product;
 import com.bravos2k5.bravosshop.model.user.User;
+import com.bravos2k5.bravosshop.repo.CartItemRepository;
 import com.bravos2k5.bravosshop.repo.CartRepository;
 import com.bravos2k5.bravosshop.repo.UserRepository;
 import com.bravos2k5.bravosshop.service.CartService;
+import com.bravos2k5.bravosshop.service.CookieService;
+import com.bravos2k5.bravosshop.service.ProductService;
 import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -16,12 +27,29 @@ public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final IdentifyGenerator identifyGenerator;
+    private final CartItemRepository cartItemRepository;
+    private final ProductService productService;
+    private final CookieService cookieService;
 
     @Autowired
-    public CartServiceImpl(CartRepository cartRepository, UserRepository userRepository, IdentifyGenerator identifyGenerator) {
+    public CartServiceImpl(CartRepository cartRepository, UserRepository userRepository, IdentifyGenerator identifyGenerator,
+                           CartItemRepository cartItemRepository, ProductService productService, CookieService cookieService) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.identifyGenerator = identifyGenerator;
+        this.cartItemRepository = cartItemRepository;
+        this.productService = productService;
+        this.cookieService = cookieService;
+    }
+
+    @Override
+    public Cart findCartById(Long cartId) {
+        return cartRepository.findById(cartId).orElse(null);
+    }
+
+    @Override
+    public Cart findCartByUsername(String username) {
+        return cartRepository.findByUser_Username(username);
     }
 
     @Override
@@ -46,21 +74,26 @@ public class CartServiceImpl implements CartService {
         }
 
         guestCart.getCartItems().forEach(cartItem -> {
-            CartItem newCartItem = new CartItem();
-            newCartItem.setId(identifyGenerator.generateId());
-            newCartItem.setCart(cart);
-            newCartItem.setProduct(cartItem.getProduct());
-            newCartItem.setQuantity(cartItem.getQuantity());
+            CartItem guestCartItem = new CartItem();
+            guestCartItem.setId(identifyGenerator.generateId());
+            guestCartItem.setCart(cart);
+            guestCartItem.setProduct(cartItem.getProduct());
+            guestCartItem.setQuantity(cartItem.getQuantity());
             cart.getCartItems().remove(cartItem);
-            cart.getCartItems().add(newCartItem);
+            cart.getCartItems().add(guestCartItem);
         });
 
         return cartRepository.saveAndFlush(cart);
     }
 
     @Override
-    public Cart updateCart(Cart cart) {
-        return null;
+    public Cart createGuestCart() {
+        Cart cart = new Cart(identifyGenerator.generateId(), null);
+        Cookie cookie = new Cookie("guestCardId",String.valueOf(cart.getId()));
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(3 * 24 * 3600);
+        cookieService.addCookie(cookie);
+        return cartRepository.saveAndFlush(cart);
     }
 
     @Override
@@ -76,6 +109,72 @@ public class CartServiceImpl implements CartService {
         if(cart == null) return null;
         cart.getCartItems().clear();
         return cartRepository.saveAndFlush(cart);
+    }
+
+    @Override
+    public CartItem updateQuantity(Long itemId, Long quantity) {
+        if(quantity == null || quantity < 0 || quantity > 999) {
+            throw new IllegalArgumentException("Quantity value must between 0 and 999");
+        }
+        CartItem cartItem = cartItemRepository.findById(itemId).orElseThrow(IllegalArgumentException::new);
+        if(quantity == 0) {
+            cartItemRepository.deleteById(itemId);
+            return null;
+        }
+        cartItem.setQuantity(quantity);
+        return cartItemRepository.saveAndFlush(cartItem);
+    }
+
+    @Override
+    public void addToCart(Long productId, Long cartId, Long quantity) {
+        if(quantity < 1) {
+            return;
+        }
+        Product product = productService.findById(productId);
+        if(product == null) {
+            throw new IllegalArgumentException("ProductId is invalid");
+        }
+        Cart cart = this.findCartById(cartId);
+        if(cart == null) {
+            throw new IllegalArgumentException("CartId is invalid");
+        }
+        CartItem cartItem = cartItemRepository.findByProductAndCart(product,cart);
+        if(cartItem == null) {
+            cartItem = new CartItem(identifyGenerator.generateId(),cart,product,quantity);
+        }
+        else {
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+        }
+        cart.getCartItems().add(cartItem);
+        cartRepository.saveAndFlush(cart);
+    }
+
+    @Override
+    public List<CartItemDto> findAllCartItemByCartId(Long cartId) {
+        if(cartId == null) {
+            return List.of();
+        }
+        return cartRepository.getAllCartItemId(cartId);
+    }
+
+    @Override
+    public List<CartItemDto> getCartItemsInSession() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long cartId = null;
+        if(authentication.getPrincipal() instanceof TokenInfo tokenInfo) {
+            cartId = this.findCartByUsername(tokenInfo.getUsername()).getId();
+        }
+        else {
+            Cookie cookie = cookieService.getCookie("guestCartId");
+            if(cookie != null) {
+                try {
+                    cartId = Long.parseLong(cookie.getValue());
+                } catch (NumberFormatException e) {
+                    cookieService.deleteCookie("guestCartId");
+                }
+            }
+        }
+        return this.findAllCartItemByCartId(cartId);
     }
 
 }

@@ -86,7 +86,6 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(request -> {
             request.requestMatchers("/actuator").permitAll();
-            request.requestMatchers("/**").permitAll();
             request.requestMatchers("/res/**").permitAll();
             request.requestMatchers("/p/**", "/", "/login", "/error").permitAll();
             request.requestMatchers("/r/**").authenticated();

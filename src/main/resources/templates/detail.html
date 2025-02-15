@@ -43,17 +43,16 @@
 
                     </div>
                     <div class="product-price">
-                        <span th:if="${product.promotionType == T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
+                        <span th:if="${!product.onPromtion()}"
                               th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}"
                               class="discounted-price"></span>
-                        <span th:if="${product.promotionType != T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
-                              th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}"
-                              class="original-price"></span>
-                        <span th:if="${product.promotionType != T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
-                              th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}"
-                              class="discounted-price"></span>
-                        <span th:if="${product.promotionType != T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
-                              th:text="${product.promotionText}" class="discount-badge"></span>
+                        <th:block th:if="${product.onPromtion()}">
+                            <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}"
+                                  class="original-price"></span>
+                            <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}"
+                                  class="discounted-price"></span>
+                            <span th:text="${product.promotionText}" class="discount-badge"></span>
+                        </th:block>
                     </div>
 
                     <div class="quantity-control">

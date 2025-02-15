@@ -5,6 +5,7 @@ import com.bravos2k5.bravosshop.utils.CurrencyFormatter;
 import lombok.Value;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Value
 public class ProductDisplayDto implements Serializable {
@@ -19,23 +20,37 @@ public class ProductDisplayDto implements Serializable {
     PromotionType promotionType;
     Double discountValue;
 
+    LocalDateTime startTime;
+    LocalDateTime endTime;
+
+    public boolean onPromtion() {
+        LocalDateTime now = LocalDateTime.now();
+        return promotionType != PromotionType.NO_PROMOTION &&
+                startTime != null && endTime != null &&
+                startTime.isBefore(now) && endTime.isAfter(now);
+    }
+
     public String getPromotionText() {
-        if(promotionType == PromotionType.PERCENTAGE) {
-            return "Giảm " + Math.round(discountValue) + " %";
-        }
-        else if(promotionType == PromotionType.FIXED) {
-            String money = currencyFormatter.formatToVietnameseCurrency(discountValue);
-            return "Giảm " + money;
+        if (onPromtion()) {
+            if(promotionType == PromotionType.PERCENTAGE) {
+                return "Giảm " + Math.round(discountValue) + " %";
+            }
+            else if(promotionType == PromotionType.FIXED) {
+                String money = currencyFormatter.formatToVietnameseCurrency(discountValue);
+                return "Giảm " + money;
+            }
         }
         return "";
     }
 
     public Double getCurrentPrice() {
-        if(promotionType == PromotionType.PERCENTAGE) {
-            return unitPrice * (1 - discountValue / 100);
-        }
-        else if(promotionType == PromotionType.FIXED) {
-            return unitPrice - discountValue;
+        if (onPromtion()) {
+            if(promotionType == PromotionType.PERCENTAGE) {
+                return unitPrice * (1 - discountValue / 100);
+            }
+            else if(promotionType == PromotionType.FIXED) {
+                return unitPrice - discountValue;
+            }
         }
         return unitPrice;
     }

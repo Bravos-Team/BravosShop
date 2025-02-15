@@ -44,4 +44,14 @@ public class CookieServiceImpl implements CookieService {
         response.addCookie(cookie);
     }
 
+    @Override
+    public String getValue(String name) {
+        if(name == null || name.isBlank()) {
+            return null;
+        }
+        Cookie cookie = this.getCookie(name);
+        if(cookie == null) return null;
+        return cookie.getValue();
+    }
+
 }
