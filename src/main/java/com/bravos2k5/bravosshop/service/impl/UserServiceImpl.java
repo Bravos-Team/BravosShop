@@ -6,6 +6,7 @@ import com.bravos2k5.bravosshop.model.user.User;
 import com.bravos2k5.bravosshop.repo.CartRepository;
 import com.bravos2k5.bravosshop.repo.UserRepository;
 import com.bravos2k5.bravosshop.service.CookieService;
+import com.bravos2k5.bravosshop.service.UserService;
 import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
 import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +16,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl implements com.bravos2k5.bravosshop.service.UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final IdentifyGenerator identifyGenerator;
     private final CartRepository cartRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
     private final CookieService cookieService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, IdentifyGenerator identifyGenerator,
-                           CartRepository cartRepository, BCryptPasswordEncoder passwordEncoder, CookieService cookieService) {
+                           CartRepository cartRepository, CookieService cookieService) {
         this.userRepository = userRepository;
         this.identifyGenerator = identifyGenerator;
         this.cartRepository = cartRepository;
-        this.passwordEncoder = passwordEncoder;
         this.cookieService = cookieService;
     }
 

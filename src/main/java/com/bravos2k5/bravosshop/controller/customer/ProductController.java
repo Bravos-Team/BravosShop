@@ -1,4 +1,4 @@
-package com.bravos2k5.bravosshop.controller;
+package com.bravos2k5.bravosshop.controller.customer;
 
 import com.bravos2k5.bravosshop.dto.product.ProductDetailDto;
 import com.bravos2k5.bravosshop.dto.product.ProductDisplayDto;
