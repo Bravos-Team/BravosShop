@@ -18,17 +18,17 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements AuthService {
 
     private final JwtService jwtService;
-    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final BCryptPasswordEncoder passwordEncoder;
     private final CookieService cookieService;
     private final RedisService redisService;
     private final EmailService emailService;
 
     @Autowired
-    public AuthServiceImpl(JwtService jwtService, UserService userService,
+    public AuthServiceImpl(JwtService jwtService, UserServiceImpl userServiceImpl,
                            BCryptPasswordEncoder passwordEncoder, CookieService cookieService, RedisService redisService, EmailService emailService) {
         this.jwtService = jwtService;
-        this.userService = userService;
+        this.userServiceImpl = userServiceImpl;
         this.passwordEncoder = passwordEncoder;
         this.cookieService = cookieService;
         this.redisService = redisService;
@@ -118,7 +118,7 @@ public class AuthServiceImpl implements AuthService {
     public String authenticateVerifyToken(String token) {
         RegisterDto registerDto = redisService.getAndDelete(token);
         if(registerDto == null) return null;
-        boolean exist = userService.existByUsernameOrEmail(registerDto.getUsername(),registerDto.getEmail());
+        boolean exist = userServiceImpl.existByUsernameOrEmail(registerDto.getUsername(),registerDto.getEmail());
         if(exist) return "exist";
         User user = User
                 .builder()
@@ -128,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(registerDto.getEmail())
                 .enabled(true)
                 .build();
-        user = userService.createNewUser(user);
+        user = userServiceImpl.createNewUser(user);
         if(user == null) {
             log.error("Error when create user. Username: {}. Email: {}", registerDto.getUsername(), registerDto.getEmail());
             return "error";
@@ -159,7 +159,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User authenticateUser(String username, String password) {
-        User user = userService.findByUsername(username);
+        User user = userServiceImpl.findByUsername(username);
         if(user == null) return null;
         return passwordEncoder.matches(password,user.getPassword()) ? user : null;
     }
