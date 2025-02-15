@@ -59,7 +59,7 @@
                         <label for="quantity">Số lượng:</label>
                         <div class="quantity-input">
                             <button type="button" class="quantity-btn" onclick="decreaseQuantity()">-</button>
-                            <form action="" method="post">
+                            <form id="addCartForm" action="/p/cart/add" method="post">
                                 <input hidden="hidden" name="productId" th:value="${product.id}">
                                 <input type="number" id="quantity" value="1" min="1" max="999">
                             </form>
@@ -68,7 +68,7 @@
                     </div>
 
                     <div class="product-actions">
-                        <button class="add-to-cart-btn">Thêm vào giỏ hàng</button>
+                        <button onclick="addToCart()" class="add-to-cart-btn">Thêm vào giỏ hàng</button>
                         <button class="buy-now-btn">Mua ngay</button>
                     </div>
 
@@ -185,6 +185,11 @@
                     star.textContent = 'star_border';
                 }
             });
+        }
+
+        function addToCart() {
+            let form = document.getElementById('addCartForm');
+            form.submit();
         }
 
     </script>

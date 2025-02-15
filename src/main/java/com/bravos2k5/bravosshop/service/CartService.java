@@ -1,5 +1,6 @@
 package com.bravos2k5.bravosshop.service;
 
+import com.bravos2k5.bravosshop.dto.cart.AddToCartDto;
 import com.bravos2k5.bravosshop.dto.cart.CartItemDto;
 import com.bravos2k5.bravosshop.model.cart.Cart;
 import com.bravos2k5.bravosshop.model.cart.CartItem;
@@ -24,10 +25,12 @@ public interface CartService {
 
     CartItem updateQuantity(Long itemId, Long quantity);
 
-    void addToCart(Long productId, Long cartId, Long quantity);
+    void addToCart(AddToCartDto addToCartDto);
 
     List<CartItemDto> findAllCartItemByCartId(Long cartId);
 
     List<CartItemDto> getCartItemsInSession();
+
+    Cart getCartInSession();
 
 }
