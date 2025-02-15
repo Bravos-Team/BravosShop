@@ -2,6 +2,7 @@ package com.bravos2k5.bravosshop.service.impl;
 
 import com.bravos2k5.bravosshop.cache.RedisCacheEntry;
 import com.bravos2k5.bravosshop.dto.product.CreateProductDto;
+import com.bravos2k5.bravosshop.dto.product.ProductDetailDto;
 import com.bravos2k5.bravosshop.dto.product.ProductDisplayDto;
 import com.bravos2k5.bravosshop.model.category.Category;
 import com.bravos2k5.bravosshop.model.product.Product;
@@ -107,6 +108,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ProductDetailDto getProductDetailsById(Long id) {
+        return productRepository.getProductDetailDtoById(id);
+    }
+
+    @Override
     public void createProduct(CreateProductDto createProductDto) {
         Category category = categoryService.findById(createProductDto.getCategoryId());
         if(category == null) {
@@ -138,20 +144,30 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException("Cannot upload images. Not you, it's us");
         }
 
-        Product product = Product.builder()
-                .id(newId)
-                .category(category)
-                .name(createProductDto.getName())
-                .description(createProductDto.getDescription())
-                .unit(createProductDto.getUnit())
-                .unitPrice(createProductDto.getUnitPrice())
-                .status(createProductDto.getStatus())
-                .thumbnail(thumbnail)
-                .images(images)
-                .promotionType(createProductDto.getPromotionType())
-                .discountValue(createProductDto.getDiscountValue())
-                .build();
-        productRepository.saveAndFlush(product);
+        try {
+            Product product = Product.builder()
+                    .id(newId)
+                    .category(category)
+                    .name(createProductDto.getName())
+                    .description(createProductDto.getDescription())
+                    .unit(createProductDto.getUnit())
+                    .unitPrice(createProductDto.getUnitPrice())
+                    .status(createProductDto.getStatus())
+                    .thumbnail(thumbnail)
+                    .images(images)
+                    .promotionType(createProductDto.getPromotionType())
+                    .discountValue(createProductDto.getDiscountValue() == null ? 0 : createProductDto.getDiscountValue())
+                    .build();
+            productRepository.saveAndFlush(product);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
+    public List<ProductDisplayDto> getRelatedProducts(Integer categoryId) {
+        return productRepository.getDisplayProductsByCategory(categoryId);
     }
 
 }

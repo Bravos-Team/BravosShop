@@ -43,7 +43,7 @@
             <h2>Bán chạy nhất</h2>
             <div class="product-grid">
                 <div th:each="product : ${topsellerProducts}" class="product-card">
-                    <div th:text="${product.promotionText}" class="product-badge"></div>
+                    <div th:if="${!product.promotionText.isEmpty()}" th:text="${product.promotionText}" class="product-badge"></div>
                     <div class="product-image-container">
                         <img th:src="${product.thumbnail}" th:alt="${product.name}" class="product-image">
                         <div class="image-overlay">
@@ -56,9 +56,14 @@
                         <span th:text="${product.name}" class="product-name"></span>
                         <span th:text="${product.categoryName}" class="product-category"></span>
                         <div class="product-actions">
-                            <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}" class="product-price"></span>
-                            <del style="font-size: 18px; color: white"
-                                 th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></del>
+                            <th:block th:if="${!product.promotionText.isEmpty()}" >
+                                <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}" class="product-price"></span>
+                                <del style="font-size: 18px; color: white"
+                                     th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></del>
+                            </th:block>
+                            <th:block th:if="${product.promotionText.isEmpty()}" >
+                                <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></span>
+                            </th:block>
                             <button class="add-to-cart-btn">Thêm Giỏ Hàng</button>
                         </div>
                     </div>
@@ -70,7 +75,7 @@
             <h2>Mới nhất</h2>
             <div class="product-grid">
                 <div th:each="product : ${newestProducts}" class="product-card">
-                    <div th:text="${product.promotionText}" class="product-badge"></div>
+                    <div th:if="${!product.promotionText.isEmpty()}" th:text="${product.promotionText}" class="product-badge"></div>
                     <div class="product-image-container">
                         <img th:src="${product.thumbnail}" th:alt="${product.name}" class="product-image">
                         <div class="image-overlay">
@@ -83,9 +88,14 @@
                         <span th:text="${product.name}" class="product-name"></span>
                         <span th:text="${product.categoryName}" class="product-category"></span>
                         <div class="product-actions">
-                            <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}" class="product-price"></span>
-                            <del style="font-size: 18px; color: white"
-                                 th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></del>
+                            <th:block th:if="${!product.promotionText.isEmpty()}" >
+                                <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}" class="product-price"></span>
+                                <del style="font-size: 18px; color: white"
+                                     th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></del>
+                            </th:block>
+                            <th:block th:if="${product.promotionText.isEmpty()}" >
+                                <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></span>
+                            </th:block>
                             <button class="add-to-cart-btn">Thêm Giỏ Hàng</button>
                         </div>
                     </div>

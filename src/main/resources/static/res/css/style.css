@@ -184,7 +184,6 @@ body {
   margin-left: 1rem;
   display: none;
   padding-left: 1rem;
-  border-left: 2px solid var(--accent-color);
 
   max-height: 0;
   overflow: hidden;
@@ -594,14 +593,14 @@ body {
 .slider-main {
   position: relative;
   width: 100%;
-  height: 400px;
+  height: 280px;
   overflow: hidden;
   border-radius: 8px;
 }
 
 .slider-image {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: cover;
   position: absolute;
   top: 0;
@@ -618,6 +617,8 @@ body {
   display: flex;
   gap: 0.5rem;
   justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .thumbnail {
@@ -750,27 +751,8 @@ body {
   font-size: 1rem;
   color: var(--text-color);
   line-height: 1.5;
-  max-height: 100px; /* Giới hạn chiều cao ban đầu */
   overflow: hidden;
   transition: max-height 0.3s ease;
-}
-
-.description-text.expanded {
-  max-height: 1000px; /* Mở rộng khi nhấn "Xem thêm" */
-}
-
-.read-more-btn {
-  background-color: transparent;
-  border: none;
-  color: var(--accent-color);
-  cursor: pointer;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-  padding: 0;
-}
-
-.read-more-btn:hover {
-  text-decoration: underline;
 }
 
 /* Nút hành động */
@@ -831,7 +813,14 @@ body {
   padding-bottom: 1rem;
 }
 
-.related-products-slider .product-card {
+.related-product-link {
+  display: flex;
+  text-decoration: none;
+  padding: 2px;
+  color: inherit;
+}
+
+.related-products-slider .product-cardd {
   flex: 0 0 200px;
   background-color: var(--secondary-color);
   border-radius: 8px;
@@ -839,23 +828,23 @@ body {
   text-align: center;
 }
 
-.related-products-slider .related-product-image {
+.related-products-slider .related-product-imagee {
   width: 100%;
   height: 150px;
   object-fit: cover;
 }
 
-.related-products-slider .product-details {
+.related-products-slider .product-detailss {
   padding: 1rem;
 }
 
-.related-products-slider .product-name {
+.related-products-slider .product-namee {
   font-size: 1rem;
   color: var(--text-color);
   margin-bottom: 0.5rem;
 }
 
-.related-products-slider .product-price {
+.related-products-slider .product-pricee {
   font-size: 1rem;
   color: var(--accent-color);
 }

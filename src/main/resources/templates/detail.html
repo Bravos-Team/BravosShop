@@ -14,39 +14,46 @@
     <main class="main-content">
         <div class="product-detail-section">
             <div class="product-detail-container">
-                <!-- Slider hình ảnh sản phẩm -->
+
                 <div class="product-image-slider">
                     <div class="slider-main">
-                        <img src="https://placehold.co/400" alt="Sản phẩm" class="slider-image active">
-                        <img src="https://placehold.co/400" alt="Sản phẩm" class="slider-image">
-                        <img src="https://placehold.co/400" alt="Sản phẩm" class="slider-image">
+                        <img th:src="${product.thumbnail}" th:alt="${product.name}" class="slider-image active">
+                        <img th:each="image : ${product.getImagesList()}" th:src="${image}" th:alt="${product.name}"
+                             class="slider-image">
                     </div>
                     <div class="slider-thumbnails">
-                        <img src="https://placehold.co/100" alt="Thumbnail 1" class="thumbnail active"
+                        <img th:src="${product.thumbnail}" th:alt="${product.name}" class="thumbnail active"
                              onclick="changeSlide(0)">
-                        <img src="https://placehold.co/100" alt="Thumbnail 2" class="thumbnail"
-                             onclick="changeSlide(1)">
-                        <img src="https://placehold.co/100" alt="Thumbnail 3" class="thumbnail"
-                             onclick="changeSlide(2)">
+                        <img th:each="image, stat : ${product.imagesList}" th:src="${image}" alt="Thumbnail"
+                             class="thumbnail"
+                             th:onclick="|changeSlide(${stat.count})|">
                     </div>
                 </div>
 
-                <!-- Thông tin chi tiết sản phẩm -->
                 <div class="product-info">
-                    <h1 class="product-name">iPhone 13 Pro</h1>
-                    <span class="product-category">Điện Thoại</span>
+                    <h1 th:text="${product.name}" class="product-name"></h1>
+                    <span th:text="${product.categoryName}" class="product-category"></span>
                     <div class="product-rating">
-                        <span class="material-icons">star</span>
-                        <span class="material-icons">star</span>
-                        <span class="material-icons">star</span>
-                        <span class="material-icons">star</span>
-                        <span class="material-icons">star_half</span>
-                        <span class="rating-text">4.5 (100 đánh giá)</span>
+
+                        <th:block th:if="${productRating.avgStars > 0}" >
+                            <span th:each="i : ${#numbers.sequence(0,productRating.avgStars * 10,10)}" class="material-icons">star</span>
+                            <span th:if="${(productRating.avgStars * 10) % 10 != 0}" class="material-icons">star_half</span>
+                        </th:block>
+                        <span th:text="|${productRating.avgStars} sao (${productRating.reviewCount} đánh giá)|" class="rating-text"></span>
+
                     </div>
                     <div class="product-price">
-                        <span class="original-price">25.990.000đ</span>
-                        <span class="discounted-price">22.990.000đ</span>
-                        <span class="discount-badge">Giảm 20%</span>
+                        <span th:if="${product.promotionType == T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
+                              th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}"
+                              class="discounted-price"></span>
+                        <span th:if="${product.promotionType != T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
+                              th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}"
+                              class="original-price"></span>
+                        <span th:if="${product.promotionType != T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
+                              th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}"
+                              class="discounted-price"></span>
+                        <span th:if="${product.promotionType != T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
+                              th:text="${product.promotionText}" class="discount-badge"></span>
                     </div>
 
                     <div class="quantity-control">
@@ -58,47 +65,38 @@
                         </div>
                     </div>
 
-                    <!-- Nút hành động -->
                     <div class="product-actions">
                         <button class="add-to-cart-btn">Thêm vào giỏ hàng</button>
                         <button class="buy-now-btn">Mua ngay</button>
                     </div>
 
-                    <!-- Phần mô tả sản phẩm -->
-                    <div class="product-description">
-                        <h3>Mô tả sản phẩm</h3>
-                        <p class="description-text">
-                            iPhone 13 Pro là một trong những điện thoại thông minh cao cấp nhất của Apple với màn hình
-                            Super Retina XDR, chip A15 Bionic, và hệ thống camera chuyên nghiệp. Sản phẩm này mang đến
-                            trải nghiệm tuyệt vời với hiệu năng mạnh mẽ, thiết kế sang trọng và thời lượng pin ấn tượng.
-                            <span id="more-text" class="more-text" style="display: none">
-                                iPhone 13 Pro còn được trang bị công nghệ màn hình ProMotion với tần số quét 120Hz, giúp mọi thao tác trở nên mượt mà hơn. Hệ thống camera mới với ống kính telephoto, góc siêu rộng và chế độ chụp đêm ấn tượng sẽ đáp ứng mọi nhu cầu chụp ảnh của bạn.
-                            </span>
-                        </p>
-                        <button class="read-more-btn" onclick="toggleDescription()">Xem thêm</button>
-                    </div>
                 </div>
             </div>
 
+            <br>
+
+            <div class="product-description">
+                <h3>Mô tả sản phẩm</h3>
+                <p th:text="${product.description}" class="description-text"></p>
+            </div>
+
+            <br>
+
             <!-- Slider sản phẩm liên quan -->
-            <div class="related-products">
+            <div th:if="${relatedProducts.size() > 1}" class="related-products">
                 <h2>Sản phẩm liên quan</h2>
                 <div class="related-products-slider">
-                    <div class="product-card">
-                        <img src="https://placehold.co/200" alt="Sản phẩm liên quan" class="related-product-image">
-                        <div class="product-details">
-                            <span class="product-name">iPhone 12 Pro</span>
-                            <span class="product-price">18.990.000đ</span>
+                    <a class="related-product-link" th:each="relatedProduct : ${relatedProducts}"
+                       th:href="@{'/p/product/' + ${relatedProduct.id}}"
+                       th:if="${product.id != relatedProduct.id}" >
+                        <div class="product-cardd">
+                            <img th:src="${relatedProduct.thumbnail}" th:alt="${relatedProduct.name}" class="related-product-imagee">
+                            <div class="product-detailss">
+                                <span th:text="${relatedProduct.name}" class="product-namee"></span>
+                                <span th:text="${@currencyFormatter.formatToVietnameseCurrency(relatedProduct.currentPrice)}" class="product-pricee"></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-card">
-                        <img src="https://placehold.co/200" alt="Sản phẩm liên quan" class="related-product-image">
-                        <div class="product-details">
-                            <span class="product-name">iPhone 14 Pro</span>
-                            <span class="product-price">28.990.000đ</span>
-                        </div>
-                    </div>
-                    <!-- Thêm các sản phẩm liên quan khác -->
+                    </a>
                 </div>
             </div>
 
@@ -176,7 +174,6 @@
             }
         }
 
-        // Đánh giá sao
         function setRating(rating) {
             const stars = document.querySelectorAll('.rating-stars .material-icons');
             stars.forEach((star, index) => {
@@ -186,21 +183,6 @@
                     star.textContent = 'star_border';
                 }
             });
-        }
-
-        // Xử lý nút "Xem thêm" cho phần mô tả
-        function toggleDescription() {
-            const descriptionText = document.querySelector('.description-text');
-            const readMoreBtn = document.querySelector('.read-more-btn');
-            descriptionText.classList.toggle('expanded');
-            if(descriptionText.classList.contains('expanded')) {
-                readMoreBtn.textContent = 'Thu gọn';
-                document.getElementById('more-text').style.display = 'inline';
-            }
-            else {
-                readMoreBtn.textContent = 'Xem thêm';
-                document.getElementById('more-text').style.display = 'none';
-            }
         }
 
     </script>

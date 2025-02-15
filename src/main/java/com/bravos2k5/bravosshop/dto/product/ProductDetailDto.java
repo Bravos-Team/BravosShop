@@ -2,22 +2,31 @@ package com.bravos2k5.bravosshop.dto.product;
 
 import com.bravos2k5.bravosshop.enums.PromotionType;
 import com.bravos2k5.bravosshop.utils.CurrencyFormatter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Value;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Value
-public class ProductDisplayDto implements Serializable {
+public class ProductDetailDto {
 
     private static final CurrencyFormatter currencyFormatter = new CurrencyFormatter();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     Long id;
-    String name;
+    String images;
     String thumbnail;
-    String categoryName;
+    String name;
+    String description;
     Double unitPrice;
-    PromotionType promotionType;
+    Integer catagoryId;
+    String categoryName;
     Double discountValue;
+    PromotionType promotionType;
 
     public String getPromotionText() {
         if(promotionType == PromotionType.PERCENTAGE) {
@@ -38,6 +47,14 @@ public class ProductDisplayDto implements Serializable {
             return unitPrice - discountValue;
         }
         return unitPrice;
+    }
+
+    public List<String> getImagesList() {
+        try {
+            return new ArrayList<>(objectMapper.readValue(images, new TypeReference<>() {}));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

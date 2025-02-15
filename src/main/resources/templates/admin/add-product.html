@@ -48,7 +48,8 @@
                         <div class="mb-3">
                             <label class="form-label">Trạng thái</label>
                             <select name="status" class="form-select">
-                                <option th:each="status : ${T(com.bravos2k5.bravosshop.enums.ProductStatus).values()}" th:value="${status}" th:text="${status.name().replaceAll('_',' ')}" ></option>
+                                <option th:each="status : ${T(com.bravos2k5.bravosshop.enums.ProductStatus).values()}"
+                                        th:value="${status}" th:text="${status.name().replaceAll('_',' ')}" ></option>
                             </select>
                         </div>
                     </div>

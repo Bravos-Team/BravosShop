@@ -1,9 +1,11 @@
 package com.bravos2k5.bravosshop.repo;
 
+import com.bravos2k5.bravosshop.dto.product.ProductDetailDto;
 import com.bravos2k5.bravosshop.dto.product.ProductDisplayDto;
 import com.bravos2k5.bravosshop.model.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -23,6 +25,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<ProductDisplayDto> getAllDisplayProduct();
 
     @Query("select new " +
+            "com.bravos2k5.bravosshop.dto.product.ProductDisplayDto(p.id, p.name, p.thumbnail, p.category.name, p.unitPrice, p.promotionType, p.discountValue) " +
+            "from Product p " +
+            "where p.category.id = :categoryId " +
+            "order by p.id desc " +
+            "limit 10")
+    List<ProductDisplayDto> getDisplayProductsByCategory(@Param("categoryId") Integer categoryId);
+
+    @Query("select new " +
             "com.bravos2k5.bravosshop.dto.product.ProductDisplayDto(o.product.id, o.product.name, o.product.thumbnail, o.product.category.name," +
             " o.product.unitPrice, o.product.promotionType, o.product.discountValue) " +
             "from OrderDetail o " +
@@ -38,5 +48,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "order by p.id desc " +
             "limit 10")
     List<ProductDisplayDto> getNewestProducts();
+
+    @Query("select new " +
+            "com.bravos2k5.bravosshop.dto.product.ProductDetailDto(p.id, p.images, p.thumbnail, p.name, p.description, p.unitPrice," +
+            " p.category.id, p.category.name, p.discountValue, p.promotionType) " +
+            "from Product p " +
+            "where p.id = :id")
+    ProductDetailDto getProductDetailDtoById(@Param("id") Long id);
 
 }

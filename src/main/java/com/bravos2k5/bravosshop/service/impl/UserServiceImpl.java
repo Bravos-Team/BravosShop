@@ -45,12 +45,12 @@ public class UserServiceImpl implements UserService {
             cartId = cartCookie.getValue();
         }
         if(cartId == null || cartId.isBlank()) {
-            user.setCart(new Cart(identifyGenerator.generateId(1), user));
+            user.setCart(new Cart(identifyGenerator.generateId(), user));
         }
         else {
             Cart cart = cartRepository.findById(Long.valueOf(cartId)).orElse(null);
             if (cart == null || cart.getUser() != null) {
-                cart = new Cart(identifyGenerator.generateId(1),user);
+                cart = new Cart(identifyGenerator.generateId(),user);
             }
             else {
                 cart.setUser(user);
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
             user.setCart(cart);
         }
         if (user.getId() == null) {
-            user.setId(identifyGenerator.generateId(1));
+            user.setId(identifyGenerator.generateId());
         }
         return userRepository.saveAndFlush(user);
     }
