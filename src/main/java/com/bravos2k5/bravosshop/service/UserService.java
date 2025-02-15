@@ -20,6 +20,8 @@ public interface UserService {
 
     User updateUserIfExist(User user);
 
+    User getProfile();
+
     boolean existByUsernameOrEmail(String username, String email);
 
     Page<UserAdminDto> getAllAdminUserDto(int pageNumber,int pageSize);

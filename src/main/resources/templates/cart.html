@@ -24,13 +24,13 @@
             <div class="cart-content">
                 <!-- Cart Items -->
                 <div class="cart-items">
-                    <div class="cart-item">
-                        <img src="https://placehold.co/100" alt="iPhone 13" class="item-image">
+                    <div th:each="cartItem : ${cartItems}" class="cart-item">
+                        <img th:src="${cartItem.thumbnail}" th:alt="${cartItem.name}" class="item-image">
                         <div class="item-details">
-                            <span class="item-name">iPhone 13 Pro</span>
-                            <span class="item-category">Điện Thoại</span>
+                            <span th:text="${cartItem.name}" class="item-name"></span>
+                            <span th:text="${cartItem.categoryName}" class="item-category"></span>
                         </div>
-                        <span class="item-price">22.990.000đ</span>
+                        <span th:text="${@currencyFormatter.formatToVietnameseCurrency(cartItem.currentPrice)}" class="item-price"></span>
                         <div class="quantity-controls">
                             <button class="quantity-btn">-</button>
                             <input type="number" class="quantity-input" value="1" min="1">

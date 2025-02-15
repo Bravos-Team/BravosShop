@@ -1,6 +1,7 @@
 package com.bravos2k5.bravosshop.service.impl;
 
 import com.bravos2k5.bravosshop.config.security.TokenInfo;
+import com.bravos2k5.bravosshop.dto.cart.AddToCartDto;
 import com.bravos2k5.bravosshop.dto.cart.CartItemDto;
 import com.bravos2k5.bravosshop.model.cart.Cart;
 import com.bravos2k5.bravosshop.model.cart.CartItem;
@@ -126,18 +127,20 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addToCart(Long productId, Long cartId, Long quantity) {
+    public void addToCart(AddToCartDto addToCartDto) {
+        Long quantity = addToCartDto.getQuantity();
+        Long productId = addToCartDto.getProductId();
+
         if(quantity < 1) {
             return;
         }
+
         Product product = productService.findById(productId);
         if(product == null) {
             throw new IllegalArgumentException("ProductId is invalid");
         }
-        Cart cart = this.findCartById(cartId);
-        if(cart == null) {
-            throw new IllegalArgumentException("CartId is invalid");
-        }
+
+        Cart cart = this.getCartInSession();
         CartItem cartItem = cartItemRepository.findByProductAndCart(product,cart);
         if(cartItem == null) {
             cartItem = new CartItem(identifyGenerator.generateId(),cart,product,quantity);
@@ -159,22 +162,28 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartItemDto> getCartItemsInSession() {
+        Long cartId = this.getCartInSession().getId();
+        return this.findAllCartItemByCartId(cartId);
+    }
+
+    @Override
+    public Cart getCartInSession() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long cartId = null;
         if(authentication.getPrincipal() instanceof TokenInfo tokenInfo) {
-            cartId = this.findCartByUsername(tokenInfo.getUsername()).getId();
+            return this.findCartByUsername(tokenInfo.getUsername());
         }
         else {
             Cookie cookie = cookieService.getCookie("guestCartId");
             if(cookie != null) {
                 try {
-                    cartId = Long.parseLong(cookie.getValue());
+                    Long cartId = Long.parseLong(cookie.getValue());
+                    return cartRepository.findById(cartId).orElseGet(this::createGuestCart);
                 } catch (NumberFormatException e) {
                     cookieService.deleteCookie("guestCartId");
                 }
             }
+            return createGuestCart();
         }
-        return this.findAllCartItemByCartId(cartId);
     }
 
 }

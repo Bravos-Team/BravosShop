@@ -1,11 +1,14 @@
 package com.bravos2k5.bravosshop.controller.customer;
 
+import com.bravos2k5.bravosshop.dto.cart.AddToCartDto;
 import com.bravos2k5.bravosshop.dto.cart.CartItemDto;
 import com.bravos2k5.bravosshop.service.CartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -26,6 +29,16 @@ public class CartController {
         List<CartItemDto> cartItemDtoList = cartService.getCartItemsInSession();
         model.addAttribute("cartItems",cartItemDtoList);
         return "cart";
+    }
+
+    @PostMapping("/add")
+    public String addToCategory(@ModelAttribute AddToCartDto addToCartDto) {
+        try {
+            cartService.addToCart(addToCartDto);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return "redirect:/p/cart";
     }
 
 }
