@@ -1,4 +1,4 @@
-package com.bravos2k5.bravosshop.service;
+package com.bravos2k5.bravosshop.service.constract;
 
 import com.bravos2k5.bravosshop.dto.cart.AddToCartDto;
 import com.bravos2k5.bravosshop.dto.cart.CartItemDto;
@@ -15,7 +15,7 @@ public interface CartService {
 
     Cart findCartByUserId(Long userId);
 
-    Cart mergeCart(Long guestCartId, Long cartId);
+    void mergeCart(Long guestCartId, Long cartId);
 
     Cart createGuestCart();
 

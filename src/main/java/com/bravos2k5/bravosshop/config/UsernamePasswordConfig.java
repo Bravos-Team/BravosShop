@@ -1,7 +1,7 @@
 package com.bravos2k5.bravosshop.config;
 
 import com.bravos2k5.bravosshop.config.security.CustomUserDetailsService;
-import com.bravos2k5.bravosshop.service.UserService;
+import com.bravos2k5.bravosshop.service.constract.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -21,7 +21,7 @@ public class Cart implements SnowFlakeId {
     @Id
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 

@@ -40,7 +40,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             " o.product.unitPrice, o.product.promotionType, o.product.discountValue, o.product.startTime, o.product.endTime) " +
             "from OrderDetail o " +
             "group by o.product.id, o.product.name, o.product.thumbnail, o.product.category.name, o.product.unitPrice," +
-            " o.product.promotionType, o.product.discountValue " +
+            " o.product.promotionType, o.product.discountValue, o.product.startTime, o.product.endTime " +
             "order by sum(o.quantity) desc " +
             "limit 10")
     List<ProductDisplayDto> getTopSellerProducts();

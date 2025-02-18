@@ -23,7 +23,7 @@
 
             <div class="cart-content">
                 <!-- Cart Items -->
-                <div class="cart-items">
+                <div th:if="${!cartItems.isEmpty()}" class="cart-items">
                     <div th:each="cartItem : ${cartItems}" class="cart-item">
                         <img th:src="${cartItem.thumbnail}" th:alt="${cartItem.name}" class="item-image">
                         <div class="item-details">
@@ -33,32 +33,16 @@
                         <span th:text="${@currencyFormatter.formatToVietnameseCurrency(cartItem.currentPrice)}" class="item-price"></span>
                         <div class="quantity-controls">
                             <button class="quantity-btn">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1">
+                            <input th:value="${cartItem.quantity}" type="number" class="quantity-input" min="1">
                             <button class="quantity-btn">+</button>
                         </div>
                         <span class="item-price">22.990.000đ</span>
                         <button class="remove-btn">×</button>
                     </div>
-
-                    <div class="cart-item">
-                        <img src="https://placehold.co/100" alt="AirPods Pro" class="item-image">
-                        <div class="item-details">
-                            <span class="item-name">AirPods Pro</span>
-                            <span class="item-category">Phụ Kiện</span>
-                        </div>
-                        <span class="item-price">5.990.000đ</span>
-                        <div class="quantity-controls">
-                            <button class="quantity-btn">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1">
-                            <button class="quantity-btn">+</button>
-                        </div>
-                        <span class="item-price">5.990.000đ</span>
-                        <button class="remove-btn">×</button>
-                    </div>
                 </div>
 
                 <!-- Cart Summary -->
-                <div class="cart-summary">
+                <div th:if="${!cartItems.isEmpty()}" class="cart-summary">
                     <h2 class="summary-title">Tổng đơn hàng</h2>
                     <div class="summary-row">
                         <span>Tạm tính</span>
@@ -81,11 +65,11 @@
                 </div>
             </div>
 
-            <!-- Empty Cart State -->
-            <div class="empty-cart" style="display: none;">
+            <div th:if="${cartItems.isEmpty()}" class="empty-cart">
                 <div class="empty-cart-message">Giỏ hàng của bạn đang trống</div>
                 <button class="empty-cart-btn">Mua sắm ngay</button>
             </div>
+
         </div>
     </main>
     <script>
@@ -102,15 +86,5 @@
             });
         });
 
-        document.querySelectorAll('.remove-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                this.closest('.cart-item').remove();
-                // Kiểm tra nếu không còn sản phẩm nào
-                if (document.querySelectorAll('.cart-item').length === 0) {
-                    document.querySelector('.cart-content').style.display = 'none';
-                    document.querySelector('.empty-cart').style.display = 'block';
-                }
-            });
-        });
     </script>
 </th:block>

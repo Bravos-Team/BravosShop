@@ -2,7 +2,7 @@ package com.bravos2k5.bravosshop.controller.admin;
 
 import com.bravos2k5.bravosshop.dto.category.CreateCategoryDto;
 import com.bravos2k5.bravosshop.dto.category.UpdateCategoryDto;
-import com.bravos2k5.bravosshop.service.CategoryService;
+import com.bravos2k5.bravosshop.service.constract.CategoryService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

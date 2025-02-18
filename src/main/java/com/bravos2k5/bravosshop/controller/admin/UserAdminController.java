@@ -3,8 +3,7 @@ package com.bravos2k5.bravosshop.controller.admin;
 
 import com.bravos2k5.bravosshop.dto.user.UserAdminDto;
 import com.bravos2k5.bravosshop.model.user.User;
-import com.bravos2k5.bravosshop.service.UserService;
-import com.bravos2k5.bravosshop.service.impl.UserServiceImpl;
+import com.bravos2k5.bravosshop.service.constract.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;

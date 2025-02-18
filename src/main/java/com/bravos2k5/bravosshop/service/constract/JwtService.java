@@ -1,4 +1,4 @@
-package com.bravos2k5.bravosshop.service;
+package com.bravos2k5.bravosshop.service.constract;
 
 import com.bravos2k5.bravosshop.config.security.TokenInfo;
 import io.jsonwebtoken.Claims;

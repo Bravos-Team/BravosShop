@@ -1,7 +1,7 @@
 package com.bravos2k5.bravosshop.controller.admin;
 
 import com.bravos2k5.bravosshop.dto.product.CreateProductDto;
-import com.bravos2k5.bravosshop.service.ProductService;
+import com.bravos2k5.bravosshop.service.constract.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;

@@ -2,7 +2,7 @@ package com.bravos2k5.bravosshop.service.impl;
 
 import com.bravos2k5.bravosshop.model.user.Address;
 import com.bravos2k5.bravosshop.repo.AddressRepository;
-import com.bravos2k5.bravosshop.service.AddressService;
+import com.bravos2k5.bravosshop.service.constract.AddressService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

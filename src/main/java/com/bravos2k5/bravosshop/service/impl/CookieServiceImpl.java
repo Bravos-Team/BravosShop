@@ -1,6 +1,6 @@
 package com.bravos2k5.bravosshop.service.impl;
 
-import com.bravos2k5.bravosshop.service.CookieService;
+import com.bravos2k5.bravosshop.service.constract.CookieService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,6 +40,7 @@ public class CookieServiceImpl implements CookieService {
     public void deleteCookie(String name) {
         Cookie cookie = new Cookie(name,"");
         cookie.setMaxAge(0);
+        cookie.setPath("/");
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
     }

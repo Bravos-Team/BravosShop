@@ -1,6 +1,6 @@
 package com.bravos2k5.bravosshop.controller.customer;
 
-import com.bravos2k5.bravosshop.service.ProductService;
+import com.bravos2k5.bravosshop.service.constract.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

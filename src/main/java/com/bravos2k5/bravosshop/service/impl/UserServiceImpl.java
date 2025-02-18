@@ -1,34 +1,32 @@
 package com.bravos2k5.bravosshop.service.impl;
 
+import com.bravos2k5.bravosshop.config.security.TokenInfo;
 import com.bravos2k5.bravosshop.dto.user.UserAdminDto;
 import com.bravos2k5.bravosshop.model.cart.Cart;
 import com.bravos2k5.bravosshop.model.user.User;
 import com.bravos2k5.bravosshop.repo.CartRepository;
 import com.bravos2k5.bravosshop.repo.UserRepository;
-import com.bravos2k5.bravosshop.service.CookieService;
-import com.bravos2k5.bravosshop.service.UserService;
-import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
-import jakarta.servlet.http.Cookie;
+import com.bravos2k5.bravosshop.service.constract.CartService;
+import com.bravos2k5.bravosshop.service.constract.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final IdentifyGenerator identifyGenerator;
+    private final CartService cartService;
     private final CartRepository cartRepository;
-    private final CookieService cookieService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, IdentifyGenerator identifyGenerator,
-                           CartRepository cartRepository, CookieService cookieService) {
+    public UserServiceImpl(UserRepository userRepository, CartService cartService, CartRepository cartRepository) {
         this.userRepository = userRepository;
-        this.identifyGenerator = identifyGenerator;
+        this.cartService = cartService;
         this.cartRepository = cartRepository;
-        this.cookieService = cookieService;
     }
 
     @Override
@@ -36,27 +34,8 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmailOrUsername(user.getEmail(),user.getUsername())) {
             return null;
         }
-        Cookie cartCookie = cookieService.getCookie("cart");
-        String cartId = null;
-        if(cartCookie != null) {
-            cartId = cartCookie.getValue();
-        }
-        if(cartId == null || cartId.isBlank()) {
-            user.setCart(new Cart(identifyGenerator.generateId(), user));
-        }
-        else {
-            Cart cart = cartRepository.findById(Long.valueOf(cartId)).orElse(null);
-            if (cart == null || cart.getUser() != null) {
-                cart = new Cart(identifyGenerator.generateId(),user);
-            }
-            else {
-                cart.setUser(user);
-            }
-            user.setCart(cart);
-        }
-        if (user.getId() == null) {
-            user.setId(identifyGenerator.generateId());
-        }
+        Cart cart = new Cart(user.getId(),user);
+        user.setCart(cart);
         return userRepository.saveAndFlush(user);
     }
 
@@ -105,6 +84,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserAdminDto> getAllAdminUserDto(int pageNumber, int pageSize) {
         return userRepository.getAllUserAdminDto(PageRequest.of( (pageNumber - 1),pageSize));
+    }
+
+    @Override
+    public User getProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = null;
+        if (authentication.getPrincipal() instanceof TokenInfo tokenInfo) {
+            user = findByUsername(tokenInfo.getUsername());
+        }
+        return user;
     }
 
 }

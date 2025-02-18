@@ -13,6 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"cart_id","product_id"}))
 public class CartItem implements SnowFlakeId {
 
     @Id
@@ -29,13 +30,6 @@ public class CartItem implements SnowFlakeId {
     @Column(nullable = false)
     @Builder.Default
     private Long quantity = 1L;
-
-    public void setQuantity(Long quantity) {
-        if (quantity < 1) {
-            throw new IllegalArgumentException("Quantity must be greater than 0");
-        }
-        this.quantity = quantity;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -2,9 +2,9 @@ package com.bravos2k5.bravosshop.config.handler;
 
 import com.bravos2k5.bravosshop.config.security.TokenInfo;
 import com.bravos2k5.bravosshop.model.user.User;
-import com.bravos2k5.bravosshop.service.AuthService;
-import com.bravos2k5.bravosshop.service.CartService;
-import com.bravos2k5.bravosshop.service.CookieService;
+import com.bravos2k5.bravosshop.service.constract.AuthService;
+import com.bravos2k5.bravosshop.service.constract.CartService;
+import com.bravos2k5.bravosshop.service.constract.CookieService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

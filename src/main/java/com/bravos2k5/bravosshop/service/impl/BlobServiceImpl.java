@@ -3,7 +3,7 @@ package com.bravos2k5.bravosshop.service.impl;
 import com.azure.core.util.BinaryData;
 import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.BlockBlobItem;
-import com.bravos2k5.bravosshop.service.BlobService;
+import com.bravos2k5.bravosshop.service.constract.BlobService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

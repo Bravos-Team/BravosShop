@@ -1,7 +1,7 @@
 package com.bravos2k5.bravosshop.config.security;
 
 import com.bravos2k5.bravosshop.model.user.User;
-import com.bravos2k5.bravosshop.service.UserService;
+import com.bravos2k5.bravosshop.service.constract.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -2,7 +2,7 @@ package com.bravos2k5.bravosshop.service.impl;
 
 
 import com.bravos2k5.bravosshop.config.security.TokenInfo;
-import com.bravos2k5.bravosshop.service.JwtService;
+import com.bravos2k5.bravosshop.service.constract.JwtService;
 import com.bravos2k5.bravosshop.utils.KeyLoader;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;

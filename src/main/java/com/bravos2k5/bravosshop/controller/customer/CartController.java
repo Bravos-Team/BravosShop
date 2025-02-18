@@ -2,7 +2,7 @@ package com.bravos2k5.bravosshop.controller.customer;
 
 import com.bravos2k5.bravosshop.dto.cart.AddToCartDto;
 import com.bravos2k5.bravosshop.dto.cart.CartItemDto;
-import com.bravos2k5.bravosshop.service.CartService;
+import com.bravos2k5.bravosshop.service.constract.CartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

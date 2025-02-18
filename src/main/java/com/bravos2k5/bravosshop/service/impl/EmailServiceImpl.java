@@ -1,6 +1,6 @@
 package com.bravos2k5.bravosshop.service.impl;
 
-import com.bravos2k5.bravosshop.service.EmailService;
+import com.bravos2k5.bravosshop.service.constract.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;

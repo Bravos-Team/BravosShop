@@ -67,7 +67,7 @@ public class User implements Serializable, UserDetails, SnowFlakeId {
     @Builder.Default
     private UserStatus status = UserStatus.ACTIVE;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
 
     @Override

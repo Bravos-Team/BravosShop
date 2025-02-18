@@ -4,7 +4,7 @@ import com.bravos2k5.bravosshop.dto.product.ProductRating;
 import com.bravos2k5.bravosshop.dto.review.PostReviewDto;
 import com.bravos2k5.bravosshop.dto.review.ReviewDisplayDto;
 import com.bravos2k5.bravosshop.repo.ReviewRepository;
-import com.bravos2k5.bravosshop.service.ReviewService;
+import com.bravos2k5.bravosshop.service.constract.ReviewService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

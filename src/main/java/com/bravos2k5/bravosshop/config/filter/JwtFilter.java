@@ -2,8 +2,8 @@ package com.bravos2k5.bravosshop.config.filter;
 
 import com.bravos2k5.bravosshop.config.security.JwtAuthenticationToken;
 import com.bravos2k5.bravosshop.config.security.TokenInfo;
-import com.bravos2k5.bravosshop.service.AuthService;
-import com.bravos2k5.bravosshop.service.JwtService;
+import com.bravos2k5.bravosshop.service.constract.AuthService;
+import com.bravos2k5.bravosshop.service.constract.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

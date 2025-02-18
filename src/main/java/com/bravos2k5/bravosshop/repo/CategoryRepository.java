@@ -39,6 +39,4 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
             " left join Category p on cc.ancestor.id = p.id")
     List<CategoryAdminDto> getAllCategoryDto();
 
-
-
 }

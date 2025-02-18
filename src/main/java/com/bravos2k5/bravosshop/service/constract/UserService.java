@@ -1,10 +1,8 @@
-package com.bravos2k5.bravosshop.service;
+package com.bravos2k5.bravosshop.service.constract;
 
 import com.bravos2k5.bravosshop.dto.user.UserAdminDto;
 import com.bravos2k5.bravosshop.model.user.User;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 public interface UserService {
 

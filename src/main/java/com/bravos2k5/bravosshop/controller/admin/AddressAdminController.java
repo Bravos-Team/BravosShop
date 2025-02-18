@@ -1,6 +1,6 @@
 package com.bravos2k5.bravosshop.controller.admin;
 
-import com.bravos2k5.bravosshop.service.AddressService;
+import com.bravos2k5.bravosshop.service.constract.AddressService;
 import com.bravos2k5.bravosshop.service.impl.UserServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

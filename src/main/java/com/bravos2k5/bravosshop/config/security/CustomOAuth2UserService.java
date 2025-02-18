@@ -1,7 +1,7 @@
 package com.bravos2k5.bravosshop.config.security;
 
 import com.bravos2k5.bravosshop.model.user.User;
-import com.bravos2k5.bravosshop.service.UserService;
+import com.bravos2k5.bravosshop.service.constract.UserService;
 import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
 import com.bravos2k5.bravosshop.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +63,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         else if (user.getGoogleId() == null){
             user.setGoogleId(googleId);
             user = userService.updateUser(user);
+        }
+
+        if(user == null) {
+            throw new IllegalStateException("Error when create new user");
         }
 
         Map<String,Object> attributes = new HashMap<>(oAuth2User.getAttributes());

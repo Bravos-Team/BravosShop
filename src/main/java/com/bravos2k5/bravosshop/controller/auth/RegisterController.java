@@ -1,8 +1,8 @@
 package com.bravos2k5.bravosshop.controller.auth;
 
 import com.bravos2k5.bravosshop.dto.register.RegisterDto;
-import com.bravos2k5.bravosshop.service.AuthService;
-import com.bravos2k5.bravosshop.service.UserService;
+import com.bravos2k5.bravosshop.service.constract.AuthService;
+import com.bravos2k5.bravosshop.service.constract.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
