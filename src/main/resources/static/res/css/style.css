@@ -1149,6 +1149,29 @@ body {
   gap: 2rem;
 }
 
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.checkbox-label {
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.cart-item-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent-color);
+  cursor: pointer;
+}
+
+.select-all-container {
+  margin-bottom: 1rem;
+}
+
 /* Cart Items List */
 .cart-items {
   background-color: var(--secondary-color);

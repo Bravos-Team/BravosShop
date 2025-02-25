@@ -15,7 +15,7 @@ public interface CartService {
 
     Cart findCartByUserId(Long userId);
 
-    void mergeCart(Long guestCartId, Long cartId);
+    void mergeCart(String username);
 
     Cart createGuestCart();
 

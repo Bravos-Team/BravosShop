@@ -62,13 +62,7 @@ public class CustomSuccessHandler extends SavedRequestAwareAuthenticationSuccess
 
     private void mergeCartHandle(String username) {
         try {
-            String guestCartCookieValue = cookieService.getValue("guestCartId");
-            if(guestCartCookieValue == null || guestCartCookieValue.isBlank()) {
-                return;
-            }
-            Long guestCartId = Long.parseLong(cookieService.getValue("guestCartId"));
-            Long cartId = cartService.findCartByUsername(username).getId();
-            cartService.mergeCart(guestCartId,cartId);
+            cartService.mergeCart(username);
         } catch (Exception e) {
             logger.error("Cannot merge cart: " + e.getMessage());
         } finally {

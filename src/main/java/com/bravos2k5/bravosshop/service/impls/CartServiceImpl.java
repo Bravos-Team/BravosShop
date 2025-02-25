@@ -16,13 +16,16 @@ import com.bravos2k5.bravosshop.service.interfaces.CookieService;
 import com.bravos2k5.bravosshop.service.interfaces.ProductService;
 import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
 import jakarta.servlet.http.Cookie;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class CartServiceImpl implements CartService {
 
@@ -62,30 +65,59 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void mergeCart(Long guestCartId, Long cartId) {
+    public void mergeCart(String username) {
+
+        String guestCartCookieValue = cookieService.getValue("guestCartId");
+        if(guestCartCookieValue == null || guestCartCookieValue.isBlank()) {
+            return;
+        }
+
+        Long guestCartId;
+
+        try {
+            guestCartId = Long.parseLong(guestCartCookieValue);
+        } catch (NumberFormatException e) {
+            log.error("Wrong type guestCartId");
+            return;
+        }
+
         Cart guestCart = cartRepository.findById(guestCartId).orElse(null);
-        Cart cart = cartRepository.findById(cartId).orElseThrow(IllegalArgumentException::new);
 
         if(guestCart == null) {
             return;
         }
 
         if(guestCart.getCartItems().isEmpty()) {
-            cartRepository.deleteById(guestCartId);
+            this.deleteCart(guestCartId);
             return;
         }
 
-        guestCart.getCartItems().forEach(cartItem -> {
-            CartItem guestCartItem = new CartItem();
-            guestCartItem.setId(identifyGenerator.generateId());
-            guestCartItem.setCart(cart);
-            guestCartItem.setProduct(cartItem.getProduct());
-            guestCartItem.setQuantity(cartItem.getQuantity());
-            cart.getCartItems().remove(cartItem);
-            cart.getCartItems().add(guestCartItem);
+        Cart cart = this.findCartByUsername(username);
+
+        Map<Long,CartItem> productCartItemMap = cart.getCartItems().stream()
+                .collect(Collectors.toMap(
+                        cartItem -> cartItem.getProduct().getId(),
+                        cartItem -> cartItem));
+
+        List<CartItem> cartItemUpdate = new ArrayList<>();
+
+        guestCart.getCartItems().forEach(guestCartItem -> {
+
+            if(productCartItemMap.containsKey(guestCartItem.getProduct().getId())) {
+                CartItem cartItem = productCartItemMap.get(guestCartItem.getProduct().getId());
+                cartItem.setQuantity(guestCartItem.getQuantity());
+                cartItemUpdate.add(cartItem);
+            } else {
+                guestCartItem.setId(identifyGenerator.generateId());
+                guestCartItem.setCart(cart);
+                cartItemUpdate.add(guestCartItem);
+            }
+
         });
 
-        cartRepository.saveAndFlush(cart);
+        cartItemRepository.saveAllAndFlush(cartItemUpdate);
+
+        this.deleteCart(guestCartId);
     }
 
     @Override

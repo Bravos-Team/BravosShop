@@ -29,11 +29,10 @@ public class UserAdminController {
     }
 
     @GetMapping
-    public String user(@RequestParam(defaultValue = "1") int page, Model model ) {
+    public String user(@RequestParam(defaultValue = "1") int page, Model model) {
         Page<UserAdminDto> userAdminDtoPage = userService.getAllAdminUserDto(page, PAGE_SIZE);
         model.addAttribute("users", userAdminDtoPage);
         model.addAttribute("currentPage", page);
-
         return "admin/user";
     }
 
@@ -62,4 +61,5 @@ public class UserAdminController {
         redirectAttributes.addFlashAttribute("message", "Mở khóa tải khoản thành công");
         return "redirect:/a/users/detail/" + id;
     }
+
 }
