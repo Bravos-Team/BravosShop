@@ -1,6 +1,6 @@
 package com.bravos2k5.bravosshop.service.interfaces;
 
-import com.bravos2k5.bravosshop.service.RedisCacheEntry;
+import com.bravos2k5.bravosshop.dto.RedisCacheEntry;
 
 import java.util.Collection;
 import java.util.List;

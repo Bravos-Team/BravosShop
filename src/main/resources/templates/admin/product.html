@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="vi" layout:decorate="~{admin/admin-template}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="vi" layout:decorate="~{admin/admin-template}" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý sản phẩm</title>
 </head>
-<body>
 <main layout:fragment="content" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Quản lý sản phẩm</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <button type="button" class="btn btn-primary">
-                <i class="bi bi-plus"></i> Thêm sản phẩm mới
-            </button>
+            <a href="/a/product/add">
+                <button type="button" class="btn btn-primary">
+                    <i class="bi bi-plus"></i> Thêm sản phẩm mới
+                </button>
+            </a>
         </div>
     </div>
 
@@ -77,50 +80,45 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>iPhone 15 Pro Max 256GB</td>
-                <td>Điện thoại</td>
-                <td>34.990.000đ</td>
-                <td><span class="badge bg-success">-10%</span></td>
-                <td><span class="badge bg-primary">Đang bán</span></td>
+            <tr th:each="product : ${products}" >
+                <td th:text="${product.id}"></td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.categoryName}"></td>
+                <td th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}"></td>
+                <td><span th:text="${product.promotionInfo}" th:class="${product.promotionInfo.equals('Không')} ? 'badge bg-secondary' : 'badge bg-success'"></span></td>
+                <td><span th:text="${product.productStatus}" th:class="${product.productStatus.IN_STOCK} ? 'badge bg-primary' : 'badge bg-danger'"></span></td>
                 <td>
-                    <button class="btn btn-sm btn-info me-1">Chi tiết</button>
+                    <a th:href="|/a/product/detail/${product.id}|">
+                        <button class="btn btn-sm btn-info me-1">Chi tiết</button>
+                    </a>
                     <button class="btn btn-sm btn-danger">Ngừng</button>
                 </td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>MacBook Air M2 13"</td>
-                <td>Laptop</td>
-                <td>28.990.000đ</td>
-                <td><span class="badge bg-secondary">Không</span></td>
-                <td><span class="badge bg-danger">Hết hàng</span></td>
-                <td>
-                    <button class="btn btn-sm btn-info me-1">Chi tiết</button>
-                    <button class="btn btn-sm btn-danger">Ngừng</button>
-                </td>
-            </tr>
-            <!-- More product rows -->
             </tbody>
         </table>
     </div>
 
     <!-- Pagination -->
-    <nav aria-label="Products pagination" class="mt-4">
+    <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Trước</a>
-            </li>
-            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
             <li class="page-item">
-                <a class="page-link" href="#">Tiếp</a>
+                <a class="page-link" th:if="${currentPage > 1}"
+                   th:href="@{/a/product(page=${currentPage - 1})}">Trước</a>
+            </li>
+
+            <li th:each="numPage : ${#numbers.sequence(1, products.totalPages)}"
+                th:classappend="${numPage == currentPage} ? 'active' : ''"
+                class="page-item">
+                <a class="page-link" th:href="@{/a/product(page=${numPage})}" th:text="${numPage}"></a>
+            </li>
+
+            <li class="page-item">
+                <a th:if="${currentPage< products.totalPages}"
+                   th:href="@{/a/product(page=${currentPage + 1})}" class="page-link" tabindex="-1"
+                   aria-disabled="true">Tiếp</a>
             </li>
         </ul>
     </nav>
 
 </main>
-</body>
 </html>

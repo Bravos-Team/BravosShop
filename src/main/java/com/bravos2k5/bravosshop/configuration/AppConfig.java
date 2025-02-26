@@ -4,6 +4,7 @@ import com.bravos2k5.bravosshop.service.CustomUserDetailsService;
 import com.bravos2k5.bravosshop.service.interfaces.UserService;
 import com.bravos2k5.bravosshop.utils.CurrencyFormatter;
 import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
+import org.apache.tika.Tika;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -54,6 +55,11 @@ public class AppConfig {
             }
         });
         return provider::authenticate;
+    }
+
+    @Bean
+    public Tika tika() {
+        return new Tika();
     }
 
 }

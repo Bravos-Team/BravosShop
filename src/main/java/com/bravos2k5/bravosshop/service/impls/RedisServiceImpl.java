@@ -1,6 +1,6 @@
 package com.bravos2k5.bravosshop.service.impls;
 
-import com.bravos2k5.bravosshop.service.RedisCacheEntry;
+import com.bravos2k5.bravosshop.dto.RedisCacheEntry;
 import com.bravos2k5.bravosshop.service.interfaces.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,11 +6,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Value
 public class ProductDetailDto {
 
@@ -32,42 +34,23 @@ public class ProductDetailDto {
     LocalDateTime endTime;
 
     public boolean onPromtion() {
-        LocalDateTime now = LocalDateTime.now();
-        return promotionType != PromotionType.NO_PROMOTION &&
-                startTime != null && endTime != null &&
-                startTime.isBefore(now) && endTime.isAfter(now);
+        return CurrencyFormatter.onPromtion(promotionType,startTime,endTime);
     }
 
     public String getPromotionText() {
-        if (onPromtion()) {
-            if(promotionType == PromotionType.PERCENTAGE) {
-                return "Giảm " + Math.round(discountValue) + " %";
-            }
-            else if(promotionType == PromotionType.FIXED) {
-                String money = currencyFormatter.formatToVietnameseCurrency(discountValue);
-                return "Giảm " + money;
-            }
-        }
-        return "";
+        return CurrencyFormatter.getPromotionDisplayText(promotionType,discountValue,startTime,endTime);
     }
 
     public Double getCurrentPrice() {
-        if (onPromtion()) {
-            if(promotionType == PromotionType.PERCENTAGE) {
-                return unitPrice * (1 - discountValue / 100);
-            }
-            else if(promotionType == PromotionType.FIXED) {
-                return unitPrice - discountValue;
-            }
-        }
-        return unitPrice;
+        return CurrencyFormatter.getCurrentPrice(promotionType,unitPrice,discountValue,startTime,endTime);
     }
 
     public List<String> getImagesList() {
         try {
             return new ArrayList<>(objectMapper.readValue(images, new TypeReference<>() {}));
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            return List.of();
         }
     }
 

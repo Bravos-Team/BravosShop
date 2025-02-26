@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin-template}">
+<html lang="vi" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{admin/admin-template}"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,36 +21,34 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label">ID sản phẩm</label>
-                            <input type="text" class="form-control" value="#12345" readonly>
+                            <input th:value="${product.id}" type="text" class="form-control" readonly>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tên sản phẩm</label>
-                            <input type="text" class="form-control" value="iPhone 15 Pro Max 256GB">
+                            <input th:value="product.name" type="text" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Danh mục</label>
                             <select class="form-select">
-                                <option value="1" selected>Điện thoại</option>
-                                <option value="2">Laptop</option>
-                                <option value="3">Tablet</option>
+                                <option th:each="category : ${@categoryServiceImpl.getAllCategoryDto()}"
+                                        th:value="${category.id}" th:text="${category.name}"></option>
                             </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Đơn vị</label>
-                            <input type="text" class="form-control" value="Chiếc">
+                            <input th:value="${product.unitPrice}" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label">Đơn giá</label>
-                            <input type="number" class="form-control" value="34990000">
+                            <input th:value="${product.unitPrice}" type="number" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Trạng thái</label>
-                            <select class="form-select">
-                                <option value="active" selected>Đang bán</option>
-                                <option value="outstock">Hết hàng</option>
-                                <option value="hidden">Ẩn</option>
+                            <select th:value="${product.status}" class="form-select">
+                                <option th:each="status : ${T(com.bravos2k5.bravosshop.enums.ProductStatus).values()}"
+                                        th:value="${status}" th:text="${status.name().replaceAll('_',' ')}" ></option>
                             </select>
                         </div>
                     </div>

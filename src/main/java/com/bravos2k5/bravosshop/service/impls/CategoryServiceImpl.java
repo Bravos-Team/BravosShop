@@ -1,6 +1,6 @@
 package com.bravos2k5.bravosshop.service.impls;
 
-import com.bravos2k5.bravosshop.service.RedisCacheEntry;
+import com.bravos2k5.bravosshop.dto.RedisCacheEntry;
 import com.bravos2k5.bravosshop.dto.CategoryAdminDto;
 import com.bravos2k5.bravosshop.dto.CreateCategoryDto;
 import com.bravos2k5.bravosshop.dto.CategoryTree;
@@ -123,6 +123,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         redisService.delete("categoryTree");
+        redisService.delete("categoryAdminList");
 
         log.info("Category: {} updated", categoryDto.getId());
     }
@@ -155,6 +156,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         redisService.delete("categoryTree");
+        redisService.delete("categoryAdminList");
 
     }
 
@@ -169,11 +171,21 @@ public class CategoryServiceImpl implements CategoryService {
             throw new RuntimeException("Error when executing this command");
         }
         redisService.delete("categoryTree");
+        redisService.delete("categoryAdminList");
+
     }
 
     @Override
     public List<CategoryAdminDto> getAllCategoryDto() {
-        return categoryRepository.getAllCategoryDto();
+        RedisCacheEntry<List<CategoryAdminDto>> cacheEntry = RedisCacheEntry.<List<CategoryAdminDto>>builder()
+                .key("categoryAdminList")
+                .fallBackFunction(categoryRepository::getAllCategoryDto)
+                .keyTimeout(30)
+                .keyTimeUnit(TimeUnit.MINUTES)
+                .lockTimeout(100)
+                .lockTimeUnit(TimeUnit.MILLISECONDS)
+                .build();
+        return redisService.getWithLock(cacheEntry);
     }
 
     @Override

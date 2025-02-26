@@ -1,8 +1,11 @@
 package com.bravos2k5.bravosshop.repository;
 
+import com.bravos2k5.bravosshop.dto.ProductAdminDto;
 import com.bravos2k5.bravosshop.dto.ProductDetailDto;
 import com.bravos2k5.bravosshop.dto.ProductDisplayDto;
 import com.bravos2k5.bravosshop.model.product.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -59,5 +62,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "from Product p " +
             "where p.id = :id")
     ProductDetailDto getProductDetailDtoById(@Param("id") Long id);
+
+    @Query("select new " +
+            "com.bravos2k5.bravosshop.dto.ProductAdminDto(p.id, p.name, p.category.name, p.unitPrice, p.promotionType," +
+            "p.discountValue,p.status,p.startTime,p.endTime) from Product p")
+    Page<ProductAdminDto> getProductDisplayAdmin(Pageable pageable);
 
 }

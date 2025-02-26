@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 @Value
 public class ProductDisplayDto implements Serializable {
 
-    private static final CurrencyFormatter currencyFormatter = new CurrencyFormatter();
-
     Long id;
     String name;
     String thumbnail;
@@ -24,35 +22,15 @@ public class ProductDisplayDto implements Serializable {
     LocalDateTime endTime;
 
     public boolean onPromtion() {
-        LocalDateTime now = LocalDateTime.now();
-        return promotionType != PromotionType.NO_PROMOTION &&
-                startTime != null && endTime != null &&
-                startTime.isBefore(now) && endTime.isAfter(now);
+        return CurrencyFormatter.onPromtion(promotionType,startTime,endTime);
     }
 
     public String getPromotionText() {
-        if (onPromtion()) {
-            if(promotionType == PromotionType.PERCENTAGE) {
-                return "Giảm " + Math.round(discountValue) + " %";
-            }
-            else if(promotionType == PromotionType.FIXED) {
-                String money = currencyFormatter.formatToVietnameseCurrency(discountValue);
-                return "Giảm " + money;
-            }
-        }
-        return "";
+        return CurrencyFormatter.getPromotionDisplayText(promotionType,discountValue,startTime,endTime);
     }
 
     public Double getCurrentPrice() {
-        if (onPromtion()) {
-            if(promotionType == PromotionType.PERCENTAGE) {
-                return unitPrice * (1 - discountValue / 100);
-            }
-            else if(promotionType == PromotionType.FIXED) {
-                return unitPrice - discountValue;
-            }
-        }
-        return unitPrice;
+        return CurrencyFormatter.getCurrentPrice(promotionType,unitPrice,discountValue,startTime,endTime);
     }
 
 }

@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String email);
 
-    @Query("select  new com.bravos2k5.bravosshop.dto.UserAdminDto(u.id, u.username,u.displayName, u.email, u.enabled)" + " from User u")
+    @Query("select new com.bravos2k5.bravosshop.dto.UserAdminDto(u.id, u.username,u.displayName, u.email, u.enabled)" + " from User u")
     Page<UserAdminDto> getAllUserAdminDto(Pageable pageable);
 
     @Query("select count(u) > 0 from User u where u.email = :email or u.username = :username")
