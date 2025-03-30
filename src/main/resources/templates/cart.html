@@ -37,21 +37,32 @@
                     <!-- Cart Item -->
                     <div th:each="cartItem : ${cartItems}" class="cart-item">
                         <div class="item-checkbox">
-                            <input type="checkbox" class="cart-item-checkbox">
+                            <input type="checkbox" class="cart-item-checkbox" data-item-id="${cartItem.cartItemId}">
                         </div>
-                        <div hidden="hidden" th:text="${cartItem.cartItemId}" ></div>
+                        <div hidden="hidden" th:text="${cartItem.cartItemId}"></div>
                         <img th:src="${cartItem.thumbnail}" alt="Product" class="item-image">
                         <div class="item-details">
                             <span th:text="${cartItem.name}" class="item-name"></span>
                             <span th:text="${cartItem.categoryName}" class="item-category"></span>
                         </div>
-                        <span th:id="${'item-price-' + cartItem.cartItemId}" th:text="${@currencyFormatter.formatToVietnameseCurrency(cartItem.currentPrice)}" class="item-price"></span>
+                        <span th:id="${'item-price-' + cartItem.cartItemId}"
+                              th:text="${@currencyFormatter.formatToVietnameseCurrency(cartItem.currentPrice)}"
+                              class="item-price"
+                              th:data-price="${cartItem.currentPrice}">
+                </span>
                         <div class="quantity-controls">
                             <button class="quantity-btn">-</button>
-                            <input th:value="${cartItem.quantity}" type="number" class="quantity-input" min="0">
+                            <input th:value="${cartItem.quantity}"
+                                   type="number"
+                                   class="quantity-input"
+                                   min="0"
+                                   data-item-id="${cartItem.cartItemId}">
                             <button class="quantity-btn">+</button>
                         </div>
-                        <span th:id="${'total-price-' + cartItem.cartItemId}" class="item-total"></span>
+                        <span th:id="${'total-price-' + cartItem.cartItemId}"
+                              class="item-total item-total-price"
+                              data-total="${cartItem.currentPrice * cartItem.quantity}">
+                </span>
                         <button class="remove-btn">×</button>
                     </div>
                 </div>
@@ -60,7 +71,7 @@
                     <h2 class="summary-title">Tổng đơn hàng</h2>
                     <div class="summary-row">
                         <span>Tạm tính</span>
-                        <span>28.980.000đ</span>
+                        <span id="subtotal-price"></span>
                     </div>
                     <div class="summary-row">
                         <span>Giảm giá</span>
@@ -72,7 +83,7 @@
                     </div>
                     <div class="summary-row summary-total">
                         <span>Tổng cộng</span>
-                        <span>26.980.000đ</span>
+                        <span id="cart-total-price" class="summary-total-price"></span>
                     </div>
                     <button class="checkout-btn">Tiến hành thanh toán</button>
                 </div>
@@ -84,7 +95,6 @@
                     <button class="empty-cart-btn">Mua sắm ngay</button>
                 </a>
             </div>
-
         </div>
     </main>
     <script>
@@ -113,6 +123,9 @@
                 document.body.appendChild(overlay);
                 modifyCall(itemId, quantity, overlay);
             }, 1000);
+
+            updateTotalPrice();
+
         }
 
         function modifyCall(itemId, quantity, overlay) {
@@ -197,11 +210,35 @@
                 });
             });
 
-            function updateTotalPrice() {
-                // Add your logic to update the total price based on selected items
-                // This is just a placeholder function
-            }
         });
+
+        function updateTotalPrice() {
+            const itemCheckboxes = document.querySelectorAll('.cart-item .cart-item-checkbox');
+            let totalPrice = 0;
+
+            itemCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    const cartItem = checkbox.closest('.cart-item');
+                    const quantity = parseInt(cartItem.querySelector('.quantity-input').value);
+                    const price = parseFloat(cartItem.querySelector('.item-price').getAttribute("data-price"));
+                    totalPrice += quantity * price;
+                }
+            });
+
+            const summaryTotalElement = document.getElementById('cart-total-price');
+            summaryTotalElement.textContent = formatCurrency(totalPrice);
+            const subTotalPrice = document.getElementById("subtotal-price");
+            subTotalPrice.textContent = formatCurrency(totalPrice);
+        }
+
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+        }
+
+        window.onload = function () {
+            updateTotalPrice();
+        }
 
     </script>
 </th:block>

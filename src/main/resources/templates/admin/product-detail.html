@@ -25,7 +25,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tên sản phẩm</label>
-                            <input th:value="product.name" type="text" class="form-control">
+                            <input th:value="${product.name}" type="text" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Danh mục</label>
@@ -36,19 +36,19 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Đơn vị</label>
-                            <input th:value="${product.unitPrice}" type="text" class="form-control">
+                            <input th:value="${product.unit}" type="text" class="form-control">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label class="form-label">Đơn giá</label>
-                            <input th:value="${product.unitPrice}" type="number" class="form-control">
+                            <input th:value="${#numbers.formatDecimal(product.unitPrice, 0, 'NONE', 2, 'POINT')}" type="number" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Trạng thái</label>
                             <select th:value="${product.status}" class="form-select">
                                 <option th:each="status : ${T(com.bravos2k5.bravosshop.enums.ProductStatus).values()}"
-                                        th:value="${status}" th:text="${status.name().replaceAll('_',' ')}" ></option>
+                                        th:value="${status}" th:text="${status.name().replaceAll('_',' ')}"></option>
                             </select>
                         </div>
                     </div>
@@ -62,35 +62,48 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="promotionType" id="noPromotion" checked>
+                                <input th:value="${T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION}"
+                                       class="form-check-input" type="radio" name="promotionType" id="noPromotion"
+                                       th:checked="${product.promotionType.name() == T(com.bravos2k5.bravosshop.enums.PromotionType).NO_PROMOTION.name()}">
                                 <label class="form-check-label" for="noPromotion">
                                     Không áp dụng khuyến mãi
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="promotionType" id="percentageDiscount">
+                                <input th:value="${T(com.bravos2k5.bravosshop.enums.PromotionType).PERCENTAGE}"
+                                       class="form-check-input" type="radio" name="promotionType" id="percentageDiscount"
+                                       th:checked="${product.promotionType.name() == T(com.bravos2k5.bravosshop.enums.PromotionType).PERCENTAGE.name()}">
                                 <label class="form-check-label" for="percentageDiscount">
                                     Giảm theo phần trăm
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="promotionType" id="fixedDiscount">
+                                <input th:value="${T(com.bravos2k5.bravosshop.enums.PromotionType).FIXED}"
+                                       class="form-check-input" type="radio" name="promotionType" id="fixedDiscount"
+                                       th:checked="${product.promotionType.name() == T(com.bravos2k5.bravosshop.enums.PromotionType).FIXED.name()}">
                                 <label class="form-check-label" for="fixedDiscount">
                                     Giảm giá cố định
                                 </label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Giá trị giảm</label>
-                                    <input type="number" class="form-control" placeholder="Nhập giá trị giảm">
+                                    <input th:value="${product.discountValue}" name="discountValue" min="0" type="number" class="form-control"
+                                           placeholder="Nhập giá trị giảm">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Thời gian bắt đầu</label>
+                                    <input th:value="${product.startTime}" name="startTime" type="datetime-local" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="form-label">Thời gian kết thúc</label>
-                                    <input type="datetime-local" class="form-control">
+                                    <input th:value="${product.endTime}" name="endTime" type="datetime-local" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -107,27 +120,17 @@
                             <label class="form-label">Ảnh thumbnail</label>
                             <input type="file" class="form-control mb-2" accept="image/*" id="thumbnailInput">
                             <div class="image-container">
-                                <img src="https://placehold.co/300" alt="Thumbnail preview" class="thumbnail-preview" id="thumbnailPreview">
+                                <img th:src="${product.thumbnail}" alt="Thumbnail preview" class="thumbnail-preview"
+                                     id="thumbnailPreview">
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Ảnh bổ sung</label>
-                            <input type="file" class="form-control mb-2" accept="image/*" multiple id="additionalImagesInput">
+                            <input type="file" class="form-control mb-2" accept="image/*" multiple
+                                   id="additionalImagesInput">
                             <div class="d-flex flex-wrap" id="additionalImages">
-                                <div class="image-container">
-                                    <img src="https://placehold.co/100" alt="Preview 1" class="preview-image">
-                                    <button type="button" class="delete-image-btn" onclick="deleteImage(this)">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </div>
-                                <div class="image-container">
-                                    <img src="https://placehold.co/100" alt="Preview 2" class="preview-image">
-                                    <button type="button" class="delete-image-btn" onclick="deleteImage(this)">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </div>
-                                <div class="image-container">
-                                    <img src="https://placehold.co/100" alt="Preview 3" class="preview-image">
+                                <div th:each="img : ${product.imagesList} " class="image-container">
+                                    <img th:src="${img}" alt="Preview 1" class="preview-image">
                                     <button type="button" class="delete-image-btn" onclick="deleteImage(this)">
                                         <i class="bi bi-x"></i>
                                     </button>
@@ -169,13 +172,13 @@
             imageContainer.remove();
         }
 
-        document.getElementById('additionalImagesInput').addEventListener('change', function(event) {
+        document.getElementById('additionalImagesInput').addEventListener('change', function (event) {
             const files = event.target.files;
             const additionalImagesContainer = document.getElementById('additionalImages');
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const imageContainer = document.createElement('div');
                     imageContainer.className = 'image-container';
                     const img = document.createElement('img');
@@ -185,7 +188,7 @@
                     deleteButton.type = 'button';
                     deleteButton.className = 'delete-image-btn';
                     deleteButton.innerHTML = '<i class="bi bi-x"></i>';
-                    deleteButton.onclick = function() {
+                    deleteButton.onclick = function () {
                         deleteImage(this);
                     };
                     imageContainer.appendChild(img);

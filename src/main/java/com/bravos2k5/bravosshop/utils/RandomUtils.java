@@ -9,7 +9,7 @@ public class RandomUtils {
     public static String randomString(int length) {
         char[] s = "qwertyuiopasdfghjklzxcvbnm1234567890".toCharArray();
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < length; i++) {
+        for (int i = 1; i <= length; i++) {
             int index = random.nextInt(s.length) - 1;
             stringBuilder.append(s[index]);
         }

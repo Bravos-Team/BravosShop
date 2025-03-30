@@ -26,4 +26,6 @@ public interface CategoryService {
 
     Category findById(Integer categoryId);
 
+    Category findBySlug(String slug);
+
 }

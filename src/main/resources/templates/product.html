@@ -13,7 +13,7 @@
 
     <main class="main-content">
         <div class="product-section">
-            <h2>Khuyến Mãi Đặc Biệt</h2>
+            <h2 th:text="${a}"></h2>
             <div class="product-grid">
                 <div th:each="product : ${discountProducts}" th:if="${product.onPromtion()}" class="product-card">
                     <div th:text="${product.promotionText}" class="product-badge"></div>
@@ -44,9 +44,9 @@
 
             <br>
 
-            <h2>Bán chạy nhất</h2>
+            <h2 th:text="${b}">Tất cả sản phẩm</h2>
             <div class="product-grid">
-                <div th:each="product : ${topsellerProducts}" class="product-card">
+                <div th:each="product : ${products}" class="product-card">
                     <div th:if="${product.onPromtion()}" th:text="${product.promotionText}" class="product-badge"></div>
                     <div class="product-image-container">
                         <img th:src="${product.thumbnail}" th:alt="${product.name}" class="product-image">
@@ -78,42 +78,6 @@
                 </div>
             </div>
 
-            <br>
-
-            <h2>Mới nhất</h2>
-            <div class="product-grid">
-                <div th:each="product : ${newestProducts}" class="product-card">
-                    <div th:if="${product.onPromtion()}" th:text="${product.promotionText}" class="product-badge"></div>
-                    <div class="product-image-container">
-                        <img th:src="${product.thumbnail}" th:alt="${product.name}" class="product-image">
-                        <div class="image-overlay">
-                            <a th:href="@{'/p/product/' + ${product.id}}">
-                                <button class="image-detail-btn">Xem Chi Tiết</button>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="product-details">
-                        <span th:text="${product.name}" class="product-name"></span>
-                        <span th:text="${product.categoryName}" class="product-category"></span>
-                        <div class="product-actions">
-                            <th:block th:if="${product.onPromtion()}" >
-                                <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.currentPrice)}" class="product-price"></span>
-                                <del style="font-size: 18px; color: white"
-                                     th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></del>
-                            </th:block>
-                            <th:block th:if="${!product.onPromtion()}" >
-                                <span th:text="${@currencyFormatter.formatToVietnameseCurrency(product.unitPrice)}" class="product-price"></span>
-                            </th:block>
-                            <form hidden="hidden" th:id="|addCartForm-${product.id}|" action="/p/cart/addToCart" method="post">
-                                <input hidden="hidden" name="productId" th:value="${product.id}">
-                                <input hidden="hidden" name="quantity" type="number" value="1" min="1" max="999">
-                            </form>
-                            <button type="submit" th:onclick="|addToCart(${product.id})|" class="add-to-cart-btn">Thêm Giỏ Hàng</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </main>
 
@@ -123,6 +87,7 @@
             form.submit();
         }
     </script>
+
 
 </th:block>
 

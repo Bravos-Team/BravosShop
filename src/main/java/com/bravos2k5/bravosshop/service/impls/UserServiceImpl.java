@@ -8,6 +8,7 @@ import com.bravos2k5.bravosshop.repository.CartRepository;
 import com.bravos2k5.bravosshop.repository.UserRepository;
 import com.bravos2k5.bravosshop.service.interfaces.CartService;
 import com.bravos2k5.bravosshop.service.interfaces.UserService;
+import com.bravos2k5.bravosshop.utils.IdentifyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,12 +22,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CartService cartService;
     private final CartRepository cartRepository;
+    private final IdentifyGenerator identifyGenerator;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, CartService cartService, CartRepository cartRepository) {
+    public UserServiceImpl(UserRepository userRepository, CartService cartService, CartRepository cartRepository, IdentifyGenerator identifyGenerator) {
         this.userRepository = userRepository;
         this.cartService = cartService;
         this.cartRepository = cartRepository;
+        this.identifyGenerator = identifyGenerator;
     }
 
     @Override
@@ -34,6 +37,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmailOrUsername(user.getEmail(),user.getUsername())) {
             return null;
         }
+        user.setId(identifyGenerator.generateId());
         Cart cart = new Cart(user.getId(),user);
         user.setCart(cart);
         return userRepository.saveAndFlush(user);

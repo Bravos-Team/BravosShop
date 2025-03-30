@@ -68,4 +68,20 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "p.discountValue,p.status,p.startTime,p.endTime) from Product p")
     Page<ProductAdminDto> getProductDisplayAdmin(Pageable pageable);
 
+    @Query("select new " +
+            "com.bravos2k5.bravosshop.dto.ProductDisplayDto(p.id, p.name, p.thumbnail, p.category.name, p.unitPrice," +
+            " p.promotionType, p.discountValue, p.startTime, p.endTime) from Product p " +
+            "where p.category.id " +
+            "in(select descendant.id from CategoryClosure where ancestor.id = :categoryId)")
+    List<ProductDisplayDto> getProductDisplayByCategory(@Param("categoryId") Integer categoryId);
+
+    @Query("select new " +
+            "com.bravos2k5.bravosshop.dto.ProductDisplayDto(p.id, p.name, p.thumbnail, p.category.name, p.unitPrice," +
+            " p.promotionType, p.discountValue, p.startTime, p.endTime) from Product p " +
+            "where p.promotionType != 0 and current timestamp between p.startTime and p.endTime and p.category.id " +
+            "in(select descendant.id from CategoryClosure where ancestor.id = :categoryId)")
+    List<ProductDisplayDto> getProductDisplayByCategoryOnPromotion(@Param("categoryId") Integer categoryId);
+
+
+
 }

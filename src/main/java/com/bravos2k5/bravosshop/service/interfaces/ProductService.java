@@ -31,4 +31,8 @@ public interface ProductService {
 
     Page<ProductAdminDto> getProductAdminDisplay(int page, int pageSize);
 
+    List<ProductDisplayDto> getProductsDisplayByCategory(Integer categoryId);
+
+    List<ProductDisplayDto> getProductsDisplayByCategoryOnPromotion(Integer categoryId);
+
 }

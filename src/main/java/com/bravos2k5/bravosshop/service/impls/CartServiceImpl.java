@@ -199,8 +199,8 @@ public class CartServiceImpl implements CartService {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         }
         cart.getCartItems().add(cartItem);
+        cartItemRepository.saveAndFlush(cartItem);
         cartRepository.saveAndFlush(cart);
-
     }
 
     @Override

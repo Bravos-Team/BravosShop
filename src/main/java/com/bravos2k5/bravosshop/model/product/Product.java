@@ -4,11 +4,17 @@ import com.bravos2k5.bravosshop.enums.ProductStatus;
 import com.bravos2k5.bravosshop.enums.PromotionType;
 import com.bravos2k5.bravosshop.utils.SnowFlakeId;
 import com.bravos2k5.bravosshop.model.category.Category;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Slf4j
 @Entity
 @Getter
 @Setter
@@ -66,6 +72,18 @@ public class Product implements SnowFlakeId {
             throw new IllegalArgumentException("Unit price must be non-negative");
         }
         return this.unitPrice = unitPrice;
+    }
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    public List<String> getImagesList() {
+        try {
+            return objectMapper.readValue(images, new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            log.error("Product {} images error",name);
+            return List.of("");
+        }
     }
 
 }

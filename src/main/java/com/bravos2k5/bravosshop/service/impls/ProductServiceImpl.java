@@ -32,17 +32,15 @@ public class ProductServiceImpl implements ProductService {
     private final ObjectMapper objectMapper;
     private final ProductRepository productRepository;
     private final RedisService redisService;
-    private final RedisTemplate<Object, Object> redisTemplate;
 
     public ProductServiceImpl(IdentifyGenerator identifyGenerator, CategoryService categoryService, BlobService blobService,
-                              ObjectMapper objectMapper, ProductRepository productRepository, RedisService redisService, RedisTemplate<Object, Object> redisTemplate) {
+                              ObjectMapper objectMapper, ProductRepository productRepository, RedisService redisService) {
         this.identifyGenerator = identifyGenerator;
         this.categoryService = categoryService;
         this.blobService = blobService;
         this.objectMapper = objectMapper;
         this.productRepository = productRepository;
         this.redisService = redisService;
-        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -181,13 +179,23 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.getProductDisplayAdmin(PageRequest.of(page - 1,pageSize));
     }
 
+    @Override
+    public List<ProductDisplayDto> getProductsDisplayByCategory(Integer categoryId) {
+        return productRepository.getProductDisplayByCategory(categoryId);
+    }
+
+    @Override
+    public List<ProductDisplayDto> getProductsDisplayByCategoryOnPromotion(Integer categoryId) {
+        return productRepository.getProductDisplayByCategoryOnPromotion(categoryId);
+    }
+
     private void clearProductsCache() {
         List<String> productsKeyList = List.of(
                 "products",
                 "discountProducts",
                 "topSellerProducts",
                 "newestProducts");
-        redisTemplate.delete(productsKeyList);
+        productsKeyList.forEach(redisService::delete);
     }
 
 }

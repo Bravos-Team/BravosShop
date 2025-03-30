@@ -193,4 +193,9 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(categoryId).orElse(null);
     }
 
+    @Override
+    public Category findBySlug(String slug) {
+        return categoryRepository.findBySlug(slug);
+    }
+
 }

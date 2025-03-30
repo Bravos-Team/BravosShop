@@ -146,7 +146,7 @@
             <ul>
                 <li th:each="categoryTree : ${@categoryServiceImpl.getCategoryTreeWithLock()}">
                     <div class="menu-item" onclick="toggleSubmenu(this)">
-                        <a class="category-link" th:text="${categoryTree.name}" th:href="@{'p/product/category/' + ${categoryTree.slug}}"></a>
+                        <a class="category-link" th:text="${categoryTree.name}" th:href="@{'/p/product/category/' + ${categoryTree.slug}}"></a>
                         <span th:if="${!categoryTree.getChildren().isEmpty()}" class="material-icons">arrow_drop_down</span>
                     </div>
                     <ul th:replace="~{::recursive(${categoryTree.children})}" class="subcategory"></ul>
@@ -159,7 +159,7 @@
 <ul th:fragment="recursive(children)" class="subcategory">
     <li th:each="child : ${children}">
         <div class="menu-item" onclick="toggleSubmenu(this)">
-            <a th:text="${child.name}" th:href="@{'p/product/category/' + ${child.slug}}" class="category-link"></a>
+            <a th:text="${child.name}" th:href="@{'/p/product/category/' + ${child.slug}}" class="category-link"></a>
             <span th:if="${!child.getChildren().isEmpty()}" class="material-icons">arrow_drop_down</span>
         </div>
         <ul th:replace="~{::recursive(${child.getChildren()})}" class="subcategory"></ul>
